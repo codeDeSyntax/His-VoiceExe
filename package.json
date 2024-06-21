@@ -1,0 +1,17 @@
+{
+  "name": "bob-lambert",
+  "version": "1.0.0",
+  "description": "The app is meant for reading sermons",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "dev":"npx electronmon ."
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^31.0.2"
+  }
+}
