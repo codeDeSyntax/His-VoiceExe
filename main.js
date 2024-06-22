@@ -24,7 +24,7 @@ function createMainWindow() {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
   const startUrl = path.join(__dirname, 'renderer', 'index.html');
   // mainWindow.loadURL(`file://${startUrl}`);
-    mainWindow.loadURL('http://localhost:3001/')
+    mainWindow.loadURL('http://localhost:3000/')
 }
 
 // About Window
