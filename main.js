@@ -6,14 +6,17 @@ const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
 
 let mainWindow;
+let noteAppWindow;
+let aboutWindow;
 
 // Main Window
 function createMainWindow() {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   mainWindow = new BrowserWindow({
-    minWidth: width,
+    width: width,
     height: height,
-    // icon: path.join(__dirname, 'assets', 'broBob.png'), // Uncomment if you have an icon
+    icon: path.join(__dirname, 'app', '/build/Bro bob.ico'), // Uncomment if you have an icon
     resizable: isDev,
     webPreferences: {
       nodeIntegration: true,
@@ -21,35 +24,36 @@ function createMainWindow() {
     },
   });
 
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  const startUrl = path.join(__dirname, 'renderer', 'index.html');
-  // mainWindow.loadURL(`file://${startUrl}`);
-    mainWindow.loadURL('http://localhost:3000/')
+  const startUrl = path.join(__dirname, 'app', '/build/index.html');
+  mainWindow.loadURL(`file://${startUrl}`);
+  // mainWindow.loadURL('http://localhost:3000/');
 }
 
-// About Window
-// function createAboutWindow() {
-//   const __dirname = path.dirname(fileURLToPath(import.meta.url));
-//   aboutWindow = new BrowserWindow({
-//     width: 300,
-//     height: 300,
-//     title: 'About Electron',
-//     icon: path.join(__dirname, 'assets', 'Brobob.jpg'),
-//   });
+function createAboutWindow() {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+  aboutWindow = new BrowserWindow({
+    width: Math.min(300, width),
+    height: Math.min(300, height),
+    title: 'About Electron',
+    icon: path.join(__dirname, 'assets', 'Brobob.jpg'),
+  });
 
-//   aboutWindow.loadFile(path.join(__dirname, 'renderer', 'about.html'));
-// }
-// function openSongBook() {
-//   const __dirname = path.dirname(fileURLToPath(import.meta.url));
-//   songBookWindow = new BrowserWindow({
-//     width: 1000,
-//     height: 1000,
-//     title: 'song book',
-//     icon: path.join(__dirname, 'assets', 'Brobob.jpg'),
-//   });
+  aboutWindow.loadFile(path.join(__dirname, 'app', '/build/renderer/About.html'));
+}
 
-//   songBookWindow.loadFile(path.join(__dirname, 'renderer', 'songbook.html'));
-// }
+function openNoteApp() {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+  noteAppWindow = new BrowserWindow({
+    width: Math.min(1000, width),
+    height: Math.min(1000, height),
+    title: 'Song Book',
+    icon: path.join(__dirname, 'app', '/build/Bro bob.ico'),
+  });
+
+  noteAppWindow.loadFile(path.join(__dirname, 'app', '/build/renderer/notes.html'));
+}
 
 // When the app is ready, create the window
 app.on('ready', () => {
@@ -71,7 +75,7 @@ const menu = [
           submenu: [
             {
               label: 'About',
-              // click: createAboutWindow,
+              click: createAboutWindow,
             },
           ],
         },
@@ -83,34 +87,34 @@ const menu = [
   ...(!isMac
     ? [
         {
-          label: 'Help',
+          label: 'Apps',
           submenu: [
             {
               label: 'About',
-              // click: createAboutWindow,
+              click: createAboutWindow,
             },
             {
-              label: 'Open songbook',
-              // click: openSongBook,
+              label: 'Open Notes',
+              click: openNoteApp,
             },
           ],
         },
       ]
     : []),
 
-  ...(isDev
-    ? [
-        {
-          label: 'Developer',
-          submenu: [
-            { role: 'reload' },
-            { role: 'forcereload' },
-            { type: 'separator' },
-            { role: 'toggledevtools' },
-          ],
-        },
-      ]
-    : []),
+  // ...(isDev
+  //   ? [
+  //       {
+  //         label: 'Developer',
+  //         submenu: [
+  //           { role: 'reload' },
+  //           { role: 'forcereload' },
+  //           { type: 'separator' },
+  //           { role: 'toggledevtools' },
+  //         ],
+  //       },
+  //     ]
+  //   : []),
 ];
 
 // Quit when all windows are closed.
