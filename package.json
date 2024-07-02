@@ -1,7 +1,6 @@
 {
   "name": "bob-lambert",
   "productName": "The Voice",
-  "homepage": ".",
   "version": "1.0.0",
   "description": "The app is meant for reading sermons",
   "main": "main.js",

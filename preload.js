@@ -17,6 +17,13 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
     ipcRenderer.on(channel, (event, ...args) => func(...args)),
 });
 
+ipcRenderer.send('playAudio');
+
+// Example of receiving a response from main process
+ipcRenderer.on('playAudio', (event, audioFilePath) => {
+  console.log('Received audio file path:', audioFilePath);
+  // Handle playing audio here, e.g., with an HTML5 audio element
+});
 // contextBridge.exposeInMainWorld('Toastify', {
 //   toast: (options) => Toastify(options).showToast(),
 // });

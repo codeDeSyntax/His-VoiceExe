@@ -16,30 +16,34 @@ function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: width,
     height: height,
-    icon: path.join(__dirname, 'app', '/build/Bro bob.ico'), // Uncomment if you have an icon
+    icon: path.join(__dirname, 'app', '/build/cloud.png'), // Uncomment if you have an icon
     resizable: isDev,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: true,
     },
+    useContentSize: true,
   });
 
   const startUrl = path.join(__dirname, 'app', '/build/index.html');
   mainWindow.loadURL(`file://${startUrl}`);
   // mainWindow.loadURL('http://localhost:3000/');
+
+
 }
 
 function createAboutWindow() {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   aboutWindow = new BrowserWindow({
-    width: Math.min(300, width),
-    height: Math.min(300, height),
+    width: Math.min(800, width),
+    height: Math.min(800, height),
     title: 'About Electron',
     icon: path.join(__dirname, 'assets', 'Brobob.jpg'),
+    useContentSize: true,
   });
 
-  aboutWindow.loadFile(path.join(__dirname, 'app', '/build/renderer/About.html'));
+  aboutWindow.loadFile(path.join(__dirname, 'about.html'));
 }
 
 function openNoteApp() {
@@ -50,9 +54,10 @@ function openNoteApp() {
     height: Math.min(1000, height),
     title: 'Song Book',
     icon: path.join(__dirname, 'app', '/build/Bro bob.ico'),
+    useContentSize: true,
   });
 
-  noteAppWindow.loadFile(path.join(__dirname, 'app', '/build/renderer/notes.html'));
+  noteAppWindow.loadFile(path.join(__dirname, 'notes.html'));
 }
 
 // When the app is ready, create the window
