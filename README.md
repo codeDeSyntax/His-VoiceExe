@@ -35,11 +35,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-For any inquiries or issues, please open an issue on the [GitHub repository](https://github.com/yourusername/your-repo-name/issues).
+For any inquiries or issues, please open an issue on the [GitHub repository](https://github.com/codeDeSyntax/Electron-React-App/issues).
 
 ## Screenshots
 
- <img src="notes.jpg" alt="App Screenshot 1" height='450vh' width="25%"/>
-![Search Functionality](https://github.com/yourusername/your-repo-name/raw/main/screenshots/search.png)
-![Sermon Reader](https://github.com/yourusername/your-repo-name/raw/main/screenshots/reader.png)
-![Audio Player](https://github.com/yourusername/your-repo-name/raw/main/screenshots/audio.png)
+ <img src="bb1.jpg" alt="App Screenshot 1" height='500vh' width='80%' />
+ <img src="bb2.jpg" alt="App Screenshot 1" height='500vh' width='80%'/>
+ <img src="bb3.jpg" alt="App Screenshot 1" height='500vh' width='80%'/>
+ <img src="bb4.jpg" alt="App Screenshot 1" height='500vh' width='80%'/>
+
