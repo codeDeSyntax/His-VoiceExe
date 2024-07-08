@@ -1,0 +1,105 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+section {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  /* background: #2f3235; */
+  /* background-image: url('../../public/darker.jpg'); */
+  background-position: center;
+  background-size: cover;
+  overflow: hidden;
+}
+
+section .air {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: url('../../public/wave.png');
+  background-size: 1000px 100px;
+  filter: hue-rotate(200deg) brightness(0.5) contrast(1.2);
+}
+
+section .air.air1 {
+  animation: wave 30s linear infinite;
+  z-index: 1000;
+  opacity: 1;
+  animation-delay: 0s;
+  bottom: 0;
+}
+
+section .air.air2 {
+  animation: wave2 15s linear infinite;
+  z-index: 999;
+  opacity: 0.5;
+  animation-delay: -5s;
+  bottom: 10px;
+  filter: hue-rotate(200deg) brightness(0.5) contrast(1.2);
+}
+
+section .air.air3 {
+  animation: wave 30s linear infinite;
+  z-index: 998;
+  opacity: 0.2;
+  animation-delay: -2s;
+  bottom: 15px;
+  filter: hue-rotate(200deg) brightness(0.5) contrast(1.2);
+}
+
+section .air.air4 {
+  animation: wave2 5s linear infinite;
+  z-index: 997;
+  opacity: 0.7;
+  animation-delay: -5s;
+  bottom: 20px;
+  filter: hue-rotate(300deg) brightness(0.5) contrast(3);
+}
+
+@keyframes wave {
+  0% {
+    background-position-x: 0px;
+  }
+  100% {
+    background-position-x: 1000px;
+  }
+}
+
+@keyframes wave2 {
+  0% {
+    background-position-x: 0px;
+  }
+  100% {
+    background-position-x: -1000px;
+  }
+}
+
+.fish {
+  position: absolute;
+  z-index: 1;
+  bottom: 10px;
+  left: 0;
+  animation: swim 30s linear infinite;
+}
+
+@keyframes swim {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(250px) translateY(-10px);
+  }
+  50% {
+    transform: translateX(500px) translateY(0);
+  }
+  75% {
+    transform: translateX(750px) translateY(-10px);
+  }
+  100% {
+    transform: translateX(1000px) translateY(0);
+  }
+}
