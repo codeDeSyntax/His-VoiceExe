@@ -39,7 +39,7 @@ For any inquiries or issues, please open an issue on the [GitHub repository](htt
 
 ## Screenshots
 
- <img src="/cloud.png" alt="App Screenshot 1" height='450vh' width="25%"/>
+ <img src="notes.jpg" alt="App Screenshot 1" height='450vh' width="25%"/>
 ![Search Functionality](https://github.com/yourusername/your-repo-name/raw/main/screenshots/search.png)
 ![Sermon Reader](https://github.com/yourusername/your-repo-name/raw/main/screenshots/reader.png)
 ![Audio Player](https://github.com/yourusername/your-repo-name/raw/main/screenshots/audio.png)
