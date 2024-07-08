@@ -25,9 +25,9 @@ function createMainWindow() {
     useContentSize: true,
   });
 
-  const startUrl = path.join(__dirname, 'app', '/build/index.html');
-  mainWindow.loadURL(`file://${startUrl}`);
-  // mainWindow.loadURL('http://localhost:3000/');
+  // const startUrl = path.join(__dirname, 'app', '/build/index.html');
+  // mainWindow.loadURL(`file://${startUrl}`);
+  mainWindow.loadURL('http://localhost:3000/');
 
 
 }
