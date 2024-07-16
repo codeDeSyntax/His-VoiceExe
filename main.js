@@ -36,7 +36,7 @@ function createAboutWindow() {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   aboutWindow = new BrowserWindow({
-    width: Math.min(800, width),
+    width: Math.min(810, width),
     height: Math.min(800, height),
     title: 'About Electron',
     icon: path.join(__dirname, 'assets', 'Brobob.jpg'),

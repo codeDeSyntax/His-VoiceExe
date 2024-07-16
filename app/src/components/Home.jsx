@@ -1,12 +1,13 @@
 import React, {
   useState,
   useContext,
-  useCallback,
+  // useCallback,
   useRef,
-  useEffect,
+  // useEffect,
 } from 'react';
 import { SermonContext } from '../components/GlobalState';
 import { motion, AnimatePresence } from 'framer-motion';
+import Home1 from './Home1'
 import HomeContent from './HomeContent';
 import SermonsContent from './SermonsContent';
 import VideosContent from './VideosContent';
@@ -50,6 +51,8 @@ const Home = () => {
     switch (activeTab) {
       case 'Home':
         return <HomeContent />;
+      case 'Home1':
+        return <Home1 sermonTextRef={sermonTextRef}/>
       case 'Sermons':
         return <SermonsContent sermonTextRef={sermonTextRef} />;
       case 'Videos':
@@ -153,10 +156,10 @@ const Home = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col min-h-screen overflow-hidden home"
+      className="flex bg-background flex-col min-h-screen overflow-hidden overflow-x-hidden home"
     >
       <header className="bg-background text-text fixed top-0 left-0 right-0 z-10">
-        <div className="flex items-center space-x-4 p-3 justify-between">
+        <div className="flex items-center space-x-4 justify-between">
           {activeTab === 'Sermons' ? (
             <div className="flex items-center justify-center gap-4">
               <div className="h-10 w-10 rounded-full flex items-center justify-center bg-[#1f2937]">
@@ -188,6 +191,7 @@ const Home = () => {
               >
                 <FaSort size={22} title="sort" id="sort" />
               </div>
+
               <TitleDrop title="sort by title" id="title" />
               <YearDrop title="sort by year" id="year" />
               <SearchBar searchText={searchText} id="search" />
@@ -210,6 +214,10 @@ const Home = () => {
                 <FaHome size={22} title="home" />
               </div>
             </motion.div>
+          <p onClick={(e) => {
+            e.preventDefault();
+            setActiveTab('Home1')
+          }}>Home</p>
             <motion.div
               className="cursor-pointer h-10 w-10 rounded-full flex items-center justify-center bg-[#1f2937]"
               variants={iconVariants}
@@ -291,6 +299,7 @@ const Home = () => {
               ''
             )}
             <TourComponent runTour={runTour} setRunTour={setRunTour} />
+
           </div>
         </div>
         {activeTab === 'Sermons' ? (
@@ -356,7 +365,7 @@ const Home = () => {
             backgroundPosition: 'center',
           }}
         >
-          <div className="scroll">{renderContent()}</div>
+          <div className="">{renderContent()}</div>
         </main>
       </div>
     </motion.div>

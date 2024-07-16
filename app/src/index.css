@@ -2,10 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+  overflow-x: hidden;
+}
 .sermonText {
   font-family: monospace;
   padding: 20px;
-  text-align: center;
   font-weight: 600;
   /* text-wrap: wrap; */
   /* overflow-wrap: break-word; */
@@ -67,7 +69,6 @@
   
   ::-webkit-scrollbar-thumb {
     background: #22272a;
-    border-radius: 10px; /* Adjusted for round thumb */
   }
   
   ::-webkit-scrollbar-thumb:hover {

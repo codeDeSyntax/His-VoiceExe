@@ -18,11 +18,11 @@ export default function App() {
   if (isLoading) {
     return <Loader />;
   }
- 
+
 
   return (
     <SermonProvider>
-      <Home />
+      <Home/>
     </SermonProvider>
   );
 }
