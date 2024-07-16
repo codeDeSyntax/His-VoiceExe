@@ -7,14 +7,14 @@ import lastSet from '../sermons/1973/1973';
 import audioSermons from '../sermons/audio';
 
 const SermonContext = createContext();
+
 const sermonCollection = [
   ...earlySermons,
   ...secondSet,
   ...thirdSet,
   ...fourthSet,
   ...lastSet,
-
-]
+];
 
 const SermonProvider = ({ children }) => {
   const [selectedSermon, setSelectedSermon] = useState('');
@@ -24,10 +24,24 @@ const SermonProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Load settings from local storage or use default values
+  const [settings, setSettings] = useState(() => {
+    const savedSettings = localStorage.getItem('sermonSettings');
+    return savedSettings
+      ? JSON.parse(savedSettings)
+      : {
+          textSize: '1',
+          textColor: '',
+          backgroundColor: '',
+          fontFamily: 'monospace',
+          
+        };
+  });
+
   const handleRandomSermons = () => {
     let sermonIndex = Math.floor(Math.random() * sermonCollection.length);
     setSelectedSermon(sermonCollection[sermonIndex]);
-  }
+  };
 
   useEffect(() => {
     handleRandomSermons();
@@ -48,38 +62,32 @@ const SermonProvider = ({ children }) => {
     }
   }, []);
 
+  // Save settings to local storage whenever they change
+  useEffect(() => {
+    localStorage.setItem('sermonSettings', JSON.stringify(settings));
+  }, [settings]);
+
   const addToSermonsInTab = (sermon) => {
     setSermonsInTab((prevSermons) => {
       if (prevSermons.length >= 8) {
-        alert('This sermon won’t add to tab');
+        alert('This sermon wont add to tab');
         return prevSermons;
       }
       if(sermon.hasOwnProperty('type')){
-        alert('This sermon won’t add')
-        return prevSermons
+        alert("This sermon won't add");
+        return prevSermons;
       }
       return [...prevSermons, sermon];
     });
-  }
+  };
 
   const deleteSermonInTab = (sermon) => {
     setSermonsInTab(sermonsInTab.filter((sermonInTab) => sermonInTab.id !== sermon.id));
-    // setSermonsInTab((prevSermons) => {
-    //   return prevSermons.filter((sermonInTab) => sermonInTab !== sermon);
-    // });
   };
 
   const displaySermonInTab = (sermon) => {
-    setSelectedSermon(sermon)
-  }
-
-
-  const [settings, setSettings] = useState({
-    textSize: '1',
-    textColor: '',
-    backgroundColor: '',
-    fontFamily: 'monospace',
-  });
+    setSelectedSermon(sermon);
+  };
 
   const updateSettings = (newSettings) => {
     setSettings((prevSettings) => ({ ...prevSettings, ...newSettings }));

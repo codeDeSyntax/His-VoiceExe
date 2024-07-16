@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { SermonContext } from '../components/GlobalState';
 import SolarSystem from '../components/Stars';
+import FloatingSearchIcon from  '../components/Search';
 const SermonsContent = ({ sermonTextRef }) => {
   const { selectedSermon, settings } = useContext(SermonContext);
 
@@ -10,9 +11,11 @@ const SermonsContent = ({ sermonTextRef }) => {
   };
 
   return (
-    <div className="p-4 min-h-screen bg-background flex flex-col items-center justify-start sem">
+    <div className={`p-4 min-h-screen bg-background  flex flex-col items-center justify-start sem `}>
       <h3 className="text-[1.5rem] font-mono font-semibold text-text text-center mt-28 ">
         {selectedSermon.title}
+        {/* <FloatingSearchIcon/> */}
+
       </h3>
       <p className="font-mono text-text text-center">{selectedSermon.date}</p>
       <SolarSystem />

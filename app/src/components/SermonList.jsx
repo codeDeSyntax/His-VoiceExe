@@ -11,7 +11,7 @@ const SermonList = ({ setIsSidebarVisible }) => {
   const handleSermonClick = (sermon) => {
     setSelectedSermon(sermon);
     addToSermonsInTab(sermon);
-    setIsSidebarVisible(true);
+    setIsSidebarVisible(false);
   };
 
   return (

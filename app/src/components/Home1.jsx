@@ -11,7 +11,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
 
 const Home1 = ({sermonTextRef}) => {
-  const { allSermons, selectedSermon } = useContext(SermonContext);
+  const { allSermons, selectedSermon,setSelectedSermon, addToSermonsInTab } = useContext(SermonContext);
   const { settings, updateSettings } = useContext(SermonContext);
   const [textSize, setTextSize] = useState(settings.textSize);
   const [textColor, setTextColor] = useState(settings.textColor);
@@ -24,6 +24,14 @@ const Home1 = ({sermonTextRef}) => {
     setBackgroundColor('#ffffff');
     setFontFamily('monospace');
   };
+
+  const handleSermonClick = (sermon) => {
+    setSelectedSermon(sermon);
+    addToSermonsInTab(sermon);
+    setCollapsed(!collapsed);
+    // setIsSidebarVisible(true);
+  };
+
   const sermonTextStyle = {
     fontSize: `${settings.textSize}rem`,
     fontFamily: `${settings.fontFamily}`, // Convert textSize to rem units
@@ -54,19 +62,23 @@ const Home1 = ({sermonTextRef}) => {
           overflow: 'auto',
           height: '100vh',
           position: 'fixed',
-          paddingTop: '1rem',
+          // paddingTop: '1rem',
           borderRadius: '10px',
           marginTop: '3rem',
           left: 0,
           top: 0,
           bottom: 0,
+          backgroundColor:'#171a1c'
         }}
+        className='bg-background'
       >
-        <div className="demo-logo-vertica" />
+        <div className="demo-logo-vertica bg-background" />
+
         <List
           dataSource={allSermons}
           renderItem={(sermon, index) => (
             <List.Item
+            onClick={() => handleSermonClick(sermon)}
               key={index}
               style={{
                 padding: 0,
@@ -102,9 +114,11 @@ const Home1 = ({sermonTextRef}) => {
           style={{
             padding: 0,
             position: 'fixed',
-            top: 40,
+            top: 50,
             width: '100%',
+            
           }}
+          className='bg-lighter flex items-center justify-between'
         >
           <Button
             type="primary"

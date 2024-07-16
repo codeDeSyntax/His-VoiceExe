@@ -1,40 +1,36 @@
 import React, {
   useState,
   useContext,
-  // useCallback,
   useRef,
-  // useEffect,
 } from 'react';
 import { SermonContext } from '../components/GlobalState';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { Drawer, Button, Input } from 'antd';
+import {
+  HomeOutlined,
+  BookOutlined,
+  VideoCameraOutlined,
+  SettingOutlined,
+  SortAscendingOutlined,
+  EyeInvisibleOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
 import Home1 from './Home1'
 import HomeContent from './HomeContent';
 import SermonsContent from './SermonsContent';
 import VideosContent from './VideosContent';
 import SettingsContent from './SettingsContent';
 import SongsContent from './SongContent';
-import SearchBar from './SearchBar';
-import YearDrop from './YearDrop';
-import {
-  FaHome,
-  FaBook,
-  FaVideo,
-  FaCog,
-  FaTimes,
-  FaSort,
-  FaEyeSlash,
-} from 'react-icons/fa';
 import TitleDrop from './TitleDrop';
+import YearDrop from './YearDrop';
 import SermonList from './SermonList';
 import TourComponent from '../components/Tour.js';
+import FloatingSearchIcon from './Search';
+
+const { Search } = Input;
 
 const Home = () => {
   const [runTour, setRunTour] = useState(false);
-
-  const startTour = () => {
-    setRunTour(true);
-  };
-
   const {
     selectedSermon,
     sermonsInTab,
@@ -42,17 +38,23 @@ const Home = () => {
     deleteSermonInTab,
     allSermons,
     setAllSermons,
+    settings
   } = useContext(SermonContext);
   const [activeTab, setActiveTab] = useState('Home');
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  const [ascending, setAscending] = useState(true); // State to manage ascending or descending order
+  const [ascending, setAscending] = useState(true);
   const sermonTextRef = useRef(null);
+
+  const startTour = () => {
+    setRunTour(true);
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'Home':
         return <HomeContent />;
       case 'Home1':
-        return <Home1 sermonTextRef={sermonTextRef}/>
+        return <Home1 sermonTextRef={sermonTextRef}/>;
       case 'Sermons':
         return <SermonsContent sermonTextRef={sermonTextRef} />;
       case 'Videos':
@@ -70,19 +72,10 @@ const Home = () => {
     const sortedSermons = [...allSermons].sort((a, b) => {
       const titleA = a.title.toUpperCase();
       const titleB = b.title.toUpperCase();
-      if (ascending) {
-        return titleA.localeCompare(titleB);
-      } else {
-        return titleB.localeCompare(titleA);
-      }
+      return ascending ? titleA.localeCompare(titleB) : titleB.localeCompare(titleA);
     });
     setAllSermons(sortedSermons);
-    setAscending(!ascending); // Toggle between ascending and descending
-  };
-
-  const iconVariants = {
-    hover: { scale: 1.2 },
-    tap: { scale: 0.9 },
+    setAscending(!ascending);
   };
 
   const handleSermonClick = (sermon) => {
@@ -147,8 +140,7 @@ const Home = () => {
   };
 
   const toggleSidebarVisibility = () => {
-    setIsSidebarVisible((prevState) => !prevState); // Toggle based on previous state
-    console.log(!isSidebarVisible); // This will still show the old state due to the async nature of setState
+    setIsSidebarVisible((prevState) => !prevState);
   };
 
   return (
@@ -156,123 +148,37 @@ const Home = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex bg-background flex-col min-h-screen overflow-hidden overflow-x-hidden home"
+      className="flex bg-background flex-col min-h-screen overflow-x-hidden home"
     >
       <header className="bg-background text-text fixed top-0 left-0 right-0 z-10">
         <div className="flex items-center space-x-4 justify-between">
-          {activeTab === 'Sermons' ? (
-            <div className="flex items-center justify-center gap-4">
-              <div className="h-10 w-10 rounded-full flex items-center justify-center bg-[#1f2937]">
-                {!isSidebarVisible ? (
-                  <FaBook
-                    size={22}
-                    className="text-text hover:cursor-pointer"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setActiveTab('Sermons');
-                      toggleSidebarVisibility(); // Use the toggle function
-                    }}
-                  />
-                ) : (
-                  <FaEyeSlash
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      toggleSidebarVisibility(); // Use the toggle function
-                    }}
-                    className="hover:cursor-pointer"
-                  />
-                )}
-              </div>
-              <div
-                className="h-10 w-10 rounded-full flex items-center justify-center bg-[#1f2937] cursor-pointer"
-                onClick={sortByTitle}
-              >
-                <FaSort size={22} title="sort" id="sort" />
-              </div>
-
-              <TitleDrop title="sort by title" id="title" />
-              <YearDrop title="sort by year" id="year" />
-              <SearchBar searchText={searchText} id="search" />
-            </div>
-          ) : (
-            ''
-          )}
           <div className="flex items-center justify-center gap-8 pr-10">
-            <motion.div
-              className="cursor-pointer"
-              variants={iconVariants}
-              whileHover="hover"
-              whileTap="tap"
+            <Button
+              className='bg-[transparent] border-none'
+              icon={<HomeOutlined className='text-text hover:text-[black]'/>}
               onClick={() => setActiveTab('Home')}
-            >
-              <div
-                className="h-10 w-10 rounded-full flex items-center justify-center bg-[#1f2937]"
-                id="home"
-              >
-                <FaHome size={22} title="home" />
-              </div>
-            </motion.div>
-          <p onClick={(e) => {
-            e.preventDefault();
-            setActiveTab('Home1')
-          }}>Home</p>
-            <motion.div
-              className="cursor-pointer h-10 w-10 rounded-full flex items-center justify-center bg-[#1f2937]"
-              variants={iconVariants}
-              whileHover="hover"
-              whileTap="tap"
-              onClick={(e) => {
-                e.stopPropagation();
+              title="home"
+            />
+            <Button
+              className='bg-[transparent] border-none'
+              icon={<BookOutlined className='text-text hover:text-[black]'/>}
+              onClick={() => {
                 setActiveTab('Sermons');
+                toggleSidebarVisibility();
               }}
-            >
-              {!isSidebarVisible ? (
-                <FaBook
-                  size={22}
-                  className="text-text hover:cursor-pointer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setActiveTab('Sermons');
-                    toggleSidebarVisibility(); // Use the toggle function
-                  }}
-                />
-              ) : (
-                <FaEyeSlash
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    toggleSidebarVisibility(); // Use the toggle function
-                  }}
-                  className="hover:cursor-pointer"
-                />
-              )}
-            </motion.div>
-            <motion.div
-              className="cursor-pointer h-10 w-10 rounded-full flex items-center justify-center bg-[#1f2937]"
-              variants={iconVariants}
-              whileHover="hover"
-              whileTap="tap"
+            />
+            <Button
+              className='bg-[transparent] border-none'
+              icon={<VideoCameraOutlined className='text-text hover:text-[black]'/>}
               onClick={() => setActiveTab('Videos')}
-            >
-              <FaVideo size={22} title="media" id="media" />
-            </motion.div>
-            <motion.div
-              className="cursor-pointer h-10 w-10 rounded-full flex items-center justify-center bg-[#1f2937]"
-              variants={iconVariants}
-              whileHover="hover"
-              whileTap="tap"
+              title="media"
+            />
+            <Button
+              className='bg-[transparent] border-none'
+              icon={<SettingOutlined spin className='text-text hover:text-[black]'/>}
               onClick={() => setActiveTab('Settings')}
-            >
-              <FaCog
-                size={22}
-                className="animate-spin"
-                title="settings"
-                id="settings"
-              />
-            </motion.div>
+              title="settings"
+            />
             <video
               autoPlay
               loop
@@ -282,34 +188,27 @@ const Home = () => {
               focus:scale-[1.2] focus:shadow-lg
               focus:-translate-y-[18vh] focus:translate-x-[20%]"
             >
-              <source
-                src="./vid.webm"
-                type="video/webm"
-                className="rounded-lg"
-              />
+              <source src="./vid.webm" type="video/webm" className="rounded-lg" />
             </video>
-            {activeTab === 'Sermons' ? (
-              <button
-                onClick={startTour}
-                className="bg-button hover:bg-button text-[white] font-bold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-              >
+            {activeTab === 'Sermons' && (
+              <Button type='primary' onClick={startTour}>
                 Start Tour
-              </button>
-            ) : (
-              ''
+              </Button>
             )}
+        {
+          activeTab === 'Sermons' && <FloatingSearchIcon searchText={searchText}/>
+        }
             <TourComponent runTour={runTour} setRunTour={setRunTour} />
-
           </div>
         </div>
-        {activeTab === 'Sermons' ? (
+        {activeTab === 'Sermons' && (
           <div className="bg-lighter p-2 gap-3 flex items-center justify-between">
             <div className="">
               <p className="font-mono text-text">{selectedSermon?.title}</p>
               <p className="text-textBlue font-mono"> {selectedSermon?.date}</p>
             </div>
-            {sermonsInTab.length > 0 ? (
-              <div className="flex item-center justify-center gap-2">
+            {sermonsInTab.length > 0 && (
+              <div className="flex items-center justify-center gap-2">
                 {sermonsInTab.map((sermon) => (
                   <div
                     className="flex items-center justify-center p-2 rounded-lg bg-background gap-2 hover:cursor-pointer group"
@@ -321,8 +220,10 @@ const Home = () => {
                     >
                       {sermon.title.slice(0, 10)}
                     </p>
-                    <FaTimes
-                      className="text-textBlue text-[.5rem] cursor-pointer size-3 opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300 ease-in-out transform group-hover:scale-110"
+                    <Button
+                      type="text"
+                      icon={<EyeInvisibleOutlined />}
+                      className="text-textBlue text-[.5rem] cursor-pointer size-3 opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300 ease-in-out transform group-hover:scale-110 inline-block"
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -332,40 +233,54 @@ const Home = () => {
                   </div>
                 ))}
               </div>
-            ) : (
-              ''
             )}
           </div>
-        ) : (
-          ''
         )}
       </header>
-      <div className="flex pt-16">
-        <AnimatePresence>
-          {isSidebarVisible && activeTab === 'Sermons' && (
-            <motion.aside
-              initial={{ x: -250 }}
-              animate={{ x: 0 }}
-              exit={{ x: -250 }}
-              transition={{ duration: 0.3 }}
-              className="w-[24rem] bg-gradient-to-b from-background to-lighter text-white p-4 overflow-y-auto fixed inset-y-0 mt-[8rem]"
+      <div className="flex pt-16  ">
+        <Drawer
+          title="Sermons"
+          placement="left"
+          closable={false}
+          onClose={toggleSidebarVisibility}
+          open={isSidebarVisible && activeTab === 'Sermons'}
+          width={400}
+          bodyStyle={{ paddingBottom: 80,backgroundColor:'#171a1c' }}
+          className='w-full'
+        >
+          <div className="mb-4 flex flex-col gap-2">
+            <Button
+              icon={<SortAscendingOutlined />}
+              onClick={sortByTitle}
+              className="w-full"
             >
-              <SermonList setIsSidebarVisible={setIsSidebarVisible} />
-            </motion.aside>
-          )}
-        </AnimatePresence>
+              Sort by Title
+            </Button>
+            <TitleDrop title="Sort by Title" id="title" />
+            <YearDrop title="Sort by Year" id="year" />
+            <Search
+              placeholder="Search sermons"
+              onSearch={searchText}
+              enterButton={<SearchOutlined />}
+            />
+          </div>
+          <SermonList setIsSidebarVisible={setIsSidebarVisible} />
+        </Drawer>
         <main
-          className={`w-[100vw] flex flex-col ${
-            isSidebarVisible && activeTab === 'Sermons' ? '' : ''
-          }`}
+          className="w-[100vw] flex flex-col"
           style={{
-            backgroundImage: 'url(darker.jpg)',
+            backgroundImage: 'url(./darker.jpg)',
             backgroundSize: 'cover',
             width: '100vw',
             backgroundPosition: 'center',
           }}
         >
-          <div className="">{renderContent()}</div>
+          <div className=""  style={{
+            // backgroundImage: settings.useImageBackground && 'url(/darker.jpg)',
+            backgroundSize: 'cover',
+            width: '100vw',
+            backgroundPosition: 'center',
+          }}>{renderContent()}</div>
         </main>
       </div>
     </motion.div>

@@ -1,8 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { SermonContext } from '../components/GlobalState';
-import { FaCog } from 'react-icons/fa';
+import { SettingOutlined } from '@ant-design/icons';
+import { Layout, Typography, Row, Col, Select, Input, Button, Card } from 'antd';
 
-const fontSizes = ['1','2', '3', '4', '5', '6', '7', '8'];
+const { Content } = Layout;
+const { Title } = Typography;
+const { Option } = Select;
+
+const fontSizes = ['1', '2', '3', '4', '5', '6', '7', '8'];
 const fontFamilies = [
   'Arial',
   'Times New Roman',
@@ -20,115 +25,120 @@ const SettingsContent = () => {
   const [textColor, setTextColor] = useState(settings.textColor);
   const [backgroundColor, setBackgroundColor] = useState(settings.backgroundColor);
   const [fontFamily, setFontFamily] = useState(settings.fontFamily);
+  const [useImageBackground, setUseImageBackground] = useState(false);
 
   const handleReset = () => {
     setTextSize('1');
-    setTextColor('#000000');
-    setBackgroundColor('#ffffff');
+    setTextColor('#bfc7ca');
+    setBackgroundColor('#171a1c');
     setFontFamily('monospace');
+    setUseImageBackground(false);
   };
 
   useEffect(() => {
-    updateSettings({ textSize, textColor, backgroundColor, fontFamily });
-  }, [textSize, textColor, backgroundColor, fontFamily, updateSettings]);
+    const storedSettings = JSON.parse(localStorage.getItem('sermonSettings'));
+    if (storedSettings) {
+      setTextSize(storedSettings.textSize);
+      setTextColor(storedSettings.textColor);
+      setBackgroundColor(storedSettings.backgroundColor);
+      setFontFamily(storedSettings.fontFamily);
+      setUseImageBackground(storedSettings.useImageBackground);
+    }
+  }, []);
+
+  useEffect(() => {
+    const updatedSettings = { textSize, textColor, backgroundColor, fontFamily, useImageBackground };
+    updateSettings(updatedSettings);
+    localStorage.setItem('sermonSettings', JSON.stringify(updatedSettings));
+  }, [textSize, textColor, backgroundColor, fontFamily, useImageBackground, updateSettings]);
+
+  const toggleImageBackground = () => {
+    setUseImageBackground(!useImageBackground);
+  };
 
   return (
-    <div className="settings-container bg-lighter w-full p-8 rounded-lg shadow-lg  mx-auto">
-      <h2 className="font-semibold text-4xl text-text mb-8">Settings</h2>
-      <div className="flex flex-col lg:flex-row gap-8">
-        <div className="settings-grid flex-1">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-[gray">
-            <div className="setting-item bg-background border border-[silver] p-6 rounded-lg shadow-sm">
-              <label htmlFor="textSize" className="text-text block mb-2 font-medium">
-                Text Size: {textSize}
-              </label>
-              <select
-                id="textSize"
-                value={textSize}
-                onChange={(e) => setTextSize(e.target.value)}
-                className="w-full border border-[gray] text-[gray] p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {fontSizes.map((size) => (
-                  <option key={size} value={size}>
-                    {size}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="setting-item bg-background border border-gray-300 p-6 rounded-lg shadow-sm">
-              <label htmlFor="textColor" className="text-text block mb-2 font-medium">
-                Text Color:
-              </label>
-              <input
-                type="color"
-                id="textColor"
-                value={textColor}
-                onChange={(e) => setTextColor(e.target.value)}
-                className="w-full h-10 border border-[gray] rounded-md"
-              />
-            </div>
-            <div className="setting-item bg-background border border-[silver] p-6 rounded-lg shadow-sm">
-              <label htmlFor="backgroundColor"  className=" text-text block mb-2 font-medium">
-                Background Color:
-              </label>
-              <input
-                type="color"
-                id="backgroundColor"
-                value={backgroundColor}
-                onChange={(e) => setBackgroundColor(e.target.value)}
-                className="w-full h-10 border border-[gray] rounded-md"
-              />
-            </div>
-            <div className="setting-item bg-background border border-[silver] p-6 rounded-lg shadow-sm">
-              <label htmlFor="fontFamily" className=" text-text block mb-2 font-medium">
-                Font Family:
-              </label>
-              <select
-                id="fontFamily"
-                value={fontFamily}
-                onChange={(e) => setFontFamily(e.target.value)}
-                className="w-full border border-[silver] text-[gray] p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {fontFamilies.map((family) => (
-                  <option key={family} value={family}>
-                    {family}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <button
-            onClick={handleReset}
-            className="mt-6 bg-button text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Reset to Default
-          </button>
-        </div>
-        <div className="preview-panel flex-1 bg-[white] border border-[gray] p-8 rounded-lg shadow-sm">
-          <h3 className="font-semibold text-2xl mb-4 text-text bg-background">Preview</h3>
-          <div
-            className="preview-container"
-            style={{
-              width: '100%',
-              height: '300px',
-              overflow: 'auto',
-              border: '1px solid #ccc',
-              borderRadius: '8px',
-              padding: '20px',
-              backgroundColor: backgroundColor,
-              color: textColor,
-              fontFamily: fontFamily,
-              fontSize: `${textSize}rem`,
-            }}
-          >
-            This is a preview of your text settings. You can see how your choices affect the appearance of the text.
-            <br />
-            <br />
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.
-          </div>
-        </div>
-      </div>
-    </div>
+    <Layout className="site-layout-background" style={{ padding: '24px 0' }}>
+      <Content style={{ padding: '0 24px', minHeight: 280 }}>
+        <Card title={<Title level={2}><SettingOutlined /> Settings</Title>} bordered={false}>
+          <Row gutter={[16, 16]}>
+            <Col xs={24} lg={12}>
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  <Title level={5}>Text Size: {textSize}</Title>
+                  <Select
+                    style={{ width: '100%' }}
+                    value={textSize}
+                    onChange={(value) => setTextSize(value)}
+                  >
+                    {fontSizes.map((size) => (
+                      <Option key={size} value={size}>{size}</Option>
+                    ))}
+                  </Select>
+                </Col>
+                <Col span={12}>
+                  <Title level={5}>Text Color</Title>
+                  <Input
+                    type="color"
+                    value={textColor}
+                    onChange={(e) => setTextColor(e.target.value)}
+                    style={{ width: '100%', height: '32px' }}
+                  />
+                </Col>
+                <Col span={12}>
+                  <Title level={5}>Background Color</Title>
+                  <Input
+                    type="color"
+                    value={backgroundColor}
+                    onChange={(e) => setBackgroundColor(e.target.value)}
+                    style={{ width: '100%', height: '32px' }}
+                  />
+                </Col>
+                <Col span={12}>
+                  <Title level={5}>Font Family</Title>
+                  <Select
+                    style={{ width: '100%' }}
+                    value={fontFamily}
+                    onChange={(value) => setFontFamily(value)}
+                  >
+                    {fontFamilies.map((family) => (
+                      <Option key={family} value={family}>{family}</Option>
+                    ))}
+                  </Select>
+                </Col>
+              </Row>
+              <Button type="primary" onClick={handleReset} style={{ marginTop: '16px' }}>
+                Reset to Default
+              </Button>
+              <Button type="default" onClick={toggleImageBackground} style={{ marginTop: '16px', marginLeft: '8px' }}>
+                {useImageBackground ? 'Use Solid Background' : 'Use Image Background'}
+              </Button>
+            </Col>
+            <Col xs={24} lg={12}>
+              <Card title="Preview" bordered={false}>
+                <div
+                  style={{
+                    width: '100%',
+                    height: '200px',
+                    overflow: 'auto',
+                    padding: '20px',
+                    backgroundColor: useImageBackground ? 'transparent' : backgroundColor,
+                    // backgroundImage: useImageBackground ? 'url(./darker.jpg)' : 'none',
+                    backgroundSize: 'cover',
+                    color: textColor,
+                    fontFamily: fontFamily,
+                    fontSize: `${textSize}rem`,
+                  }}
+                >
+                  This is a preview of your text settings. You can see how your choices affect the appearance of the text.
+                  <br /><br />
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.
+                </div>
+              </Card>
+            </Col>
+          </Row>
+        </Card>
+      </Content>
+    </Layout>
   );
 };
 
