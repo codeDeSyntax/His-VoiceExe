@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { SermonContext } from '../components/GlobalState';
 import SolarSystem from '../components/Stars';
-import FloatingSearchIcon from  '../components/Search';
 const SermonsContent = ({ sermonTextRef }) => {
   const { selectedSermon, settings } = useContext(SermonContext);
 
