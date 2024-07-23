@@ -66,11 +66,12 @@ const TitleDrop = () => {
       menu={{ items }}
       trigger={['click']}
       placement="bottomLeft"
+      style={{background:'#427092'}}
     >
-      <Button className='bg-background '>
+      <Button className=' bg-lighter shadow-inner shadow-background border-none text-[white]'>
         <Space>
           Title
-          <DownOutlined />
+          <DownOutlined className='text-sm'/>
         </Space>
       </Button>
     </Dropdown>

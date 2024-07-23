@@ -15,7 +15,7 @@ const SermonList = ({ setIsSidebarVisible }) => {
   };
 
   return (
-    <div className="sermonList">
+    <div className="sermonList mt-[8rem]">
       {/* <div className="">
        <YearDrop/>
        <TitleDrop/>

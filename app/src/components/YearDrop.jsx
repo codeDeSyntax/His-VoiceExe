@@ -72,10 +72,10 @@ const YearDrop = () => {
       trigger={['click']}
       placement="bottomLeft"
     >
-      <Button className='bg-background shadow-md shadow-text'>
+      <Button className=' bg-lighter shadow-inner shadow-background border-none text-[white]'>
         <Space>
           Year
-          <DownOutlined />
+          <DownOutlined className='text-sm'/>
         </Space>
       </Button>
     </Dropdown>
