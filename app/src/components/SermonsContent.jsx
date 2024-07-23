@@ -5,18 +5,19 @@ const SermonsContent = ({ sermonTextRef }) => {
   const { selectedSermon, settings } = useContext(SermonContext);
 
   const sermonTextStyle = {
+
     fontSize: `${settings.textSize}rem`,
     fontFamily: `${settings.fontFamily}`, // Convert textSize to rem units
   };
-
+const storedSettings = JSON.parse(localStorage.getItem('sermonSettings'));
   return (
-    <div className={`p-4 min-h-screen bg-background  flex flex-col items-center justify-start sem `}>
-      <h3 className="text-[1.5rem] font-mono font-semibold text-text text-center mt-28 ">
+    <div className={`p-4 min-h-screen flex flex-col items-center justify-start sem ${storedSettings.useImageBackground ? 'sermonBack': 'bg-background'}`}>
+      <h3 className="text-[1.5rem] font-mono font-semibold text-text text-center mt-28">
         {selectedSermon.title}
         {/* <FloatingSearchIcon/> */}
 
       </h3>
-      <p className="font-mono text-text text-center">{selectedSermon.date}</p>
+      <p className={`font-mono text-text text-center`}>{selectedSermon.date}</p>
       <SolarSystem />
       {selectedSermon.hasOwnProperty('type') ? (
         <>

@@ -5,7 +5,7 @@ import React, {
 } from 'react';
 import { SermonContext } from '../components/GlobalState';
 import { motion } from 'framer-motion';
-import { Drawer, Button, Input } from 'antd';
+import { Drawer, Input } from 'antd';
 import {
   HomeOutlined,
   BookOutlined,
@@ -26,10 +26,54 @@ import YearDrop from './YearDrop';
 import SermonList from './SermonList';
 import TourComponent from '../components/Tour.js';
 import FloatingSearchIcon from './Search';
+import { EllipsisOutlined } from '@ant-design/icons';
+import { Button, Divider, Space, Tour } from 'antd';
 
 const { Search } = Input;
 
 const Home = () => {
+
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+  const ref3 = useRef(null);
+  const ref4 = useRef(null);
+  const ref5 = useRef(null);
+  const [open, setOpen] = useState(false);
+
+  const steps = [
+    {
+      title: 'Go to Home',
+      description: 'Click to go to the home page.',
+      cover: (
+        <img
+          alt="tour.png"
+          src="./eagle1.jpg"
+        />
+      ),
+      target: () => ref1.current,
+    },
+    {
+      title: 'Sermons',
+      description: 'When you click this, you get to see a random sermon from Bob Lambert. Click to see more.',
+      target: () => ref2.current,
+    },
+    {
+      title: 'Images',
+      description: 'Click to view message related images.',
+      target: () => ref3.current,
+    },
+    {
+      title: 'Settings',
+      description: 'You will be able to change the sermon text settings as you please.',
+      target: () => ref4.current,
+    },
+    {
+      title: 'Search',
+      description: 'Search for a Quote withing the current sermon.',
+      target: () => ref5.current,
+    },
+  ];
+
   const [runTour, setRunTour] = useState(false);
   const {
     selectedSermon,
@@ -38,16 +82,16 @@ const Home = () => {
     deleteSermonInTab,
     allSermons,
     setAllSermons,
-    settings
+
   } = useContext(SermonContext);
   const [activeTab, setActiveTab] = useState('Home');
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [ascending, setAscending] = useState(true);
   const sermonTextRef = useRef(null);
 
-  const startTour = () => {
-    setRunTour(true);
-  };
+  // const startTour = () => {
+  //   setRunTour(true);
+  // };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -158,6 +202,7 @@ const Home = () => {
               icon={<HomeOutlined className='text-text hover:text-[black]'/>}
               onClick={() => setActiveTab('Home')}
               title="home"
+              ref={ref1}
             />
             <Button
               className='bg-[transparent] border-none'
@@ -166,18 +211,21 @@ const Home = () => {
                 setActiveTab('Sermons');
                 toggleSidebarVisibility();
               }}
+              ref={ref2}
             />
             <Button
               className='bg-[transparent] border-none'
               icon={<VideoCameraOutlined className='text-text hover:text-[black]'/>}
               onClick={() => setActiveTab('Videos')}
               title="media"
+              ref={ref3}
             />
             <Button
               className='bg-[transparent] border-none'
               icon={<SettingOutlined spin className='text-text hover:text-[black]'/>}
               onClick={() => setActiveTab('Settings')}
               title="settings"
+              ref={ref4}
             />
             <video
               autoPlay
@@ -191,12 +239,17 @@ const Home = () => {
               <source src="./vid.webm" type="video/webm" className="rounded-lg" />
             </video>
             {activeTab === 'Sermons' && (
-              <Button type='primary' onClick={startTour}>
-                Start Tour
-              </Button>
+              // <Button type='primary' onClick={startTour}>
+              //   Start Tour
+              // </Button>
+              <Button className='bg-textBlue text-[white] border-none shadow-inner  shadow-text' onClick={() => setOpen(true)}>
+              See how it works
+            </Button>
+
+             
             )}
         {
-          activeTab === 'Sermons' && <FloatingSearchIcon searchText={searchText}/>
+          activeTab === 'Sermons' && <FloatingSearchIcon searchText={searchText} ref5={ref5}/>
         }
             <TourComponent runTour={runTour} setRunTour={setRunTour} />
           </div>
@@ -222,8 +275,8 @@ const Home = () => {
                     </p>
                     <Button
                       type="text"
-                      icon={<EyeInvisibleOutlined />}
-                      className="text-textBlue text-[.5rem] cursor-pointer size-3 opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300 ease-in-out transform group-hover:scale-110 inline-block"
+                      icon={<EyeInvisibleOutlined className='text-textBlue hover:text-text'/>}
+                      className="text-textBlue text-[.5rem]  flex items-center justify-center cursor-pointer size-3 ease-in-out "
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -237,6 +290,7 @@ const Home = () => {
           </div>
         )}
       </header>
+      <Tour open={open} onClose={() => setOpen(false)} mask={false} className='bg-textBlue' type='#427092' steps={steps} />
       <div className="flex pt-16  ">
         <Drawer
           title="Sermons"

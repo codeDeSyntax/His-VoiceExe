@@ -12,6 +12,12 @@ body{
   /* text-wrap: wrap; */
   /* overflow-wrap: break-word; */
 }
+.sermonBack{
+background-image: url('../public/darker.jpg');
+background-position: center;
+background-size: cover;
+
+}
 .highlight {
   color: #00ff00;
   text-decoration: underline;
@@ -60,21 +66,21 @@ body{
   ::-webkit-scrollbar {
     width: 8px;
   }
-  
+
   ::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px grey;
     border-radius: 10px; /* Adjusted for rounded corners */
     background-color: #8c8c8c;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     background: #22272a;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
     background: #40aae2;
   }
-  
+
 
 audio {
   filter: sepia(20%) saturate(70%) grayscale(1) contrast(99%) invert(12%);

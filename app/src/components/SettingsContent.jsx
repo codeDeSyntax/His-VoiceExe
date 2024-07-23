@@ -25,7 +25,7 @@ const SettingsContent = () => {
   const [textColor, setTextColor] = useState(settings.textColor);
   const [backgroundColor, setBackgroundColor] = useState(settings.backgroundColor);
   const [fontFamily, setFontFamily] = useState(settings.fontFamily);
-  const [useImageBackground, setUseImageBackground] = useState(false);
+  const [useImageBackground, setUseImageBackground] = useState(true);
 
   const handleReset = () => {
     setTextSize('1');
@@ -52,8 +52,9 @@ const SettingsContent = () => {
     localStorage.setItem('sermonSettings', JSON.stringify(updatedSettings));
   }, [textSize, textColor, backgroundColor, fontFamily, useImageBackground, updateSettings]);
 
-  const toggleImageBackground = () => {
+  const toggleImageBackground = (e) => {
     setUseImageBackground(!useImageBackground);
+    e.preventDefault();
   };
 
   return (

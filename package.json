@@ -8,11 +8,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx electronmon .",
-    "dev":"npx electronmon ."
+    "dev": "npx electronmon ."
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "electron": "^31.0.2"
+    "electron": "^31.2.1",
+    "electronmon": "^2.0.3"
   }
 }

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { SermonContext } from '../components/GlobalState';
 
-const FloatingSearchIcon = ({ searchText }) => {
+const FloatingSearchIcon = ({ searchText,ref5 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { searchTerm, setSearchTerm } = useContext(SermonContext);
   const searchContainerRef = useRef(null);
@@ -63,7 +63,7 @@ const FloatingSearchIcon = ({ searchText }) => {
             />
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded-r-lg bg-textBlue"
+              className="px-4 py-2 bg-blue-500 shadow-inner shadow-text  text-white rounded-r-lg bg-textBlue"
             >
               Search
             </button>
@@ -78,6 +78,7 @@ const FloatingSearchIcon = ({ searchText }) => {
         </div>
       )}
       <button
+      ref={ref5}
         onClick={toggleSearch}
         className={`p-2 text-text bg-button h-8 w-8 rounded-full flex items-center justify-center ${
           isExpanded && 'hidden'
@@ -87,6 +88,6 @@ const FloatingSearchIcon = ({ searchText }) => {
       </button>
     </div>
   );
-};
+}
 
 export default FloatingSearchIcon;
