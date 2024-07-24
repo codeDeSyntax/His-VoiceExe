@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+
 
 const generateStars = (numStars) => {
   return Array.from({ length: numStars }, () => ({
@@ -11,31 +11,6 @@ const generateStars = (numStars) => {
   }));
 };
 
-const StarTwinkle = keyframes`
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
-`;
-
-const Star = styled.div`
-  position: absolute;
-  background: white;
-  border-radius: 50%;
-  width: ${(props) => props.size}px;
-  height: ${(props) => props.size}px;
-  top: ${(props) => props.y}%;
-  left: ${(props) => props.x}%;
-  animation: ${StarTwinkle} ${(props) => props.duration}s infinite ${(props) => props.delay}s;
-`;
-
-const SolarSystemContainer = styled.div`
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  background: ;
-  overflow: hidden;
-  pointer-events: none;
-`;
-
 const SolarSystem = () => {
   const [stars, setStars] = useState([]);
 
@@ -44,18 +19,22 @@ const SolarSystem = () => {
   }, []);
 
   return (
-    <SolarSystemContainer>
+    <div className="solar-system-container">
       {stars.map((star, index) => (
-        <Star
+        <div
           key={index}
-          x={star.x}
-          y={star.y}
-          size={star.size}
-          duration={star.duration}
-          delay={star.delay}
+          className="star"
+          style={{
+            top: `${star.y}%`,
+            left: `${star.x}%`,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+            animationDuration: `${star.duration}s`,
+            animationDelay: `${star.delay}s`
+          }}
         />
       ))}
-    </SolarSystemContainer>
+    </div>
   );
 };
 

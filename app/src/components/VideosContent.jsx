@@ -51,7 +51,7 @@ const VideosContent = () => {
   };
 
   return (
-    <div className="flex flex-wrap justify-center p-4 bg-background text-white min-h-screen">
+    <div className="flex flex-wrap justify-center p-4 bg-background text-white min-h-screen pt-20">
       {images.map((src, index) => (
         <motion.div
           key={index}

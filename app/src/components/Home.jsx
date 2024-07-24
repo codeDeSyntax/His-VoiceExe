@@ -1,7 +1,7 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef,useEffect } from 'react';
 import { SermonContext } from '../components/GlobalState';
 import { motion } from 'framer-motion';
-import { Drawer, Input } from 'antd';
+import { Drawer, } from 'antd';
 import {
   HomeOutlined,
   BookOutlined,
@@ -9,7 +9,7 @@ import {
   SettingOutlined,
   SortAscendingOutlined,
   EyeInvisibleOutlined,
-  SearchOutlined,
+ 
 } from '@ant-design/icons';
 import Home1 from './Home1';
 import HomeContent from './HomeContent';
@@ -22,10 +22,24 @@ import YearDrop from './YearDrop';
 import SermonList from './SermonList';
 import TourComponent from '../components/Tour.js';
 import FloatingSearchIcon from './Search';
-import { EllipsisOutlined } from '@ant-design/icons';
-import { Button, Divider, Space, Tour } from 'antd';
+// import { EllipsisOutlined } from '@ant-design/icons';
+import { Button,  Tour } from 'antd';
 
-const { Search } = Input;
+import earlySermons from '../sermons/1964-1969/firstset';
+import secondSet from '../sermons/1970/1970';
+import thirdSet from '../sermons/1971/1971';
+import fourthSet from '../sermons/1972/1972';
+import lastSet from '../sermons/1973/1973';
+import audioSermons from '../sermons/audio';
+
+const sermonCollection = [
+  ...earlySermons,
+  ...secondSet,
+  ...thirdSet,
+  ...fourthSet,
+  ...lastSet,
+  ...audioSermons
+];
 
 const Home = () => {
   const ref1 = useRef(null);
@@ -33,6 +47,9 @@ const Home = () => {
   const ref3 = useRef(null);
   const ref4 = useRef(null);
   const ref5 = useRef(null);
+  const ref6 = useRef(null);
+  const ref7 = useRef(null);
+  const ref8 = useRef(null);
   const [open, setOpen] = useState(false);
 
   const steps = [
@@ -64,6 +81,32 @@ const Home = () => {
       description: 'Search for a Quote withing the current sermon.',
       target: () => ref5.current,
     },
+    {
+      title: 'Side bar',
+      description: 'See what happens in this side bar.',
+      target: () => setIsSidebarVisible(true),
+    },
+    {
+      title: 'Sort',
+      description: 'Keep clicking to sort current list in different ways',
+      target: () => ref6.current,
+    },
+    {
+      title: 'Search within List',
+      description: 'start typing to search for sermons',
+      target: () => ref7.current,
+    },
+    {
+      title: 'Sort by Year or Title',
+      description: 'select letter or year to filter sermons ',
+      target: () => ref8.current,
+    },
+    {
+      title: 'Finished👍👍',
+      description: 'You are done!',
+      cover: <img alt="tour.png" src="./eagle2.jpg" />,
+      target: () => setIsSidebarVisible(false),
+    },
   ];
 
   const [runTour, setRunTour] = useState(false);
@@ -78,11 +121,12 @@ const Home = () => {
   const [activeTab, setActiveTab] = useState('Home');
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [ascending, setAscending] = useState(true);
+  const [sermonSearch , setSermonSearch] = useState('');
   const sermonTextRef = useRef(null);
 
-  // const startTour = () => {
-  //   setRunTour(true);
-  // };
+ useEffect(() => {
+  setAllSermons(sermonCollection)
+ }, [setAllSermons])
 
   const renderContent = () => {
     switch (activeTab) {
@@ -152,7 +196,7 @@ const Home = () => {
         }
   
         // Add the highlighted match with an icon
-        fragments.push(`<span class="highlight">${locationIconHtml}${match[0]}</span>`);
+        fragments.push(`<span class="highlight flex">${locationIconHtml}${match[0]}</span>`);
   
         lastIndex = matchEnd;
       }
@@ -183,6 +227,38 @@ const Home = () => {
       }
     }
   };
+
+// Function to escape special characters for regex
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+const searchByTitleOrYear = () => {
+  // Sanitize the search input to escape any special regex characters
+  const sanitizedSearch = escapeRegExp(sermonSearch);
+
+  // Construct the regex with the sanitized search term
+  let searchRegex;
+  try {
+    searchRegex = new RegExp(sanitizedSearch, 'i');
+  } catch (e) {
+    // Handle invalid regex error (fallback to a safe search)
+    searchRegex = new RegExp('', 'i');
+  }
+
+  const filteredSermons = sermonCollection.filter((sermon) => 
+    searchRegex.test(sermon.title) || searchRegex.test((sermon.year))
+  );
+
+  setAllSermons(filteredSermons);
+
+  // Reset to all sermons if search input is empty
+  if (sermonSearch.length === 0) {
+    setAllSermons(sermonCollection);
+  }
+};
+
+
   
   
 
@@ -197,8 +273,8 @@ const Home = () => {
       transition={{ duration: 0.5 }}
       className="flex bg-background flex-col min-h-screen overflow-x-hidden home"
     >
-      <header className="bg-background text-text fixed top-0 left-0 right-0 z-10">
-        <div className="flex items-center space-x-4 justify-between">
+      <header className="bg-background text-text fixed top-0 left-0 right-0 z-10 ">
+        <div className="flex w-full items-center space-x-4 justify-between py-3">
           <div className="flex items-center justify-center gap-8 pr-10">
             <Button
               className="bg-[transparent] border-none"
@@ -237,21 +313,6 @@ const Home = () => {
               title="settings"
               ref={ref4}
             />
-            <video
-              autoPlay
-              loop
-              className="h-14 w-14 rounded-lg transition duration-300 ease-in-out transform
-              hover:scale-[9] hover:shadow-lg
-              hover:translate-y-[25vh] hover:translate-x-[30%]
-              focus:scale-[1.2] focus:shadow-lg
-              focus:-translate-y-[18vh] focus:translate-x-[20%]"
-            >
-              <source
-                src="./vid.webm"
-                type="video/webm"
-                className="rounded-lg"
-              />
-            </video>
             {activeTab === 'Sermons' && (
               // <Button type='primary' onClick={startTour}>
               //   Start Tour
@@ -270,7 +331,7 @@ const Home = () => {
           </div>
         </div>
         {activeTab === 'Sermons' && (
-          <div className="bg-lighter p-2 gap-3 flex items-center justify-between">
+          <div className="bg-lighter p-2 gap-3 flex items-center justify-between w-full ">
             <div className="">
               <p className="font-mono text-text">{selectedSermon?.title}</p>
               <p className="text-textBlue font-mono"> {selectedSermon?.date}</p>
@@ -328,6 +389,7 @@ const Home = () => {
         >
           <div className="mb-4 flex flex-col gap-2 fixed bg-background pt-8 pb-2 w-[28%] top-0">
             <Button
+            ref={ref6}
               icon={<SortAscendingOutlined />}
               onClick={sortByTitle}
               className="w-full bg-textBlue text-[white] border-none shadow-inner  shadow-text"
@@ -335,11 +397,17 @@ const Home = () => {
               Sort by Title
             </Button>
             <form className="flex items-center bg-background rounded-lg shadow-md">
+              
               <input
+              ref={ref7}
                 type="text"
-                // value={searchTerm}
-                // onChange={(e) => setSearchTerm(e.target.value)}
-                className="px-4 py-2 rounded-l-lg focus:outline-none bg-lighter shadow-inner flex-1 shadow-text"
+                onChange={(e) => {
+                  console.log(sermonCollection[7])
+                  // e.preventDefault();
+                  setSermonSearch(e.target.value);
+                  searchByTitleOrYear();
+                }}
+                className="px-4 py-2 rounded-l-lg focus:outline-none bg-lighter shadow-inner flex-1 shadow-text text-text"
                 placeholder="Search..."
               />
               <button
@@ -349,7 +417,7 @@ const Home = () => {
                 Search
               </button>
             </form>
-            <div className="flex gap-2">
+            <div className="flex gap-2" ref={ref8}>
               <TitleDrop title="Sort by Title" id="title" />
               <YearDrop title="Sort by Year" id="year" />
             </div>

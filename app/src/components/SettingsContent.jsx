@@ -58,7 +58,7 @@ const SettingsContent = () => {
   };
 
   return (
-    <Layout className="site-layout-background" style={{ padding: '24px 0' }}>
+    <Layout className="site-layout-background pt-[7rem]">
       <Content style={{ padding: '0 24px', minHeight: 280 }}>
         <Card title={<Title level={2}><SettingOutlined /> Settings</Title>} bordered={false}>
           <Row gutter={[16, 16]}>

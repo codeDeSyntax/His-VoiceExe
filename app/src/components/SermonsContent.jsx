@@ -11,7 +11,7 @@ const SermonsContent = ({ sermonTextRef }) => {
   };
 const storedSettings = JSON.parse(localStorage.getItem('sermonSettings'));
   return (
-    <div className={`p-4 min-h-screen flex flex-col items-center justify-start sem ${storedSettings.useImageBackground ? 'sermonBack': 'bg-background'}`}>
+    <div className={`p-4 min-h-screen pt-20 flex flex-col items-center justify-start sem ${storedSettings.useImageBackground ? 'sermonBack': 'bg-background'}`}>
       <h3 className="text-[1.5rem] font-mono font-semibold text-text text-center mt-28">
         {selectedSermon.title}
         {/* <FloatingSearchIcon/> */}
@@ -27,7 +27,7 @@ const storedSettings = JSON.parse(localStorage.getItem('sermonSettings'));
               This sermon is in audio format
             </p>
           </audio>
-          <a href={selectedSermon.audioUrl} className="text-[blue] italic">
+          <a href={selectedSermon.audioUrl} className="text-textBlue italic">
             {selectedSermon.audioUrl}
           </a>
         </>
