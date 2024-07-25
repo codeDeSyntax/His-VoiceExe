@@ -1,7 +1,7 @@
-import React, { useState, useContext, useRef,useEffect } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { SermonContext } from '../components/GlobalState';
 import { motion } from 'framer-motion';
-import { Drawer, } from 'antd';
+import { Drawer } from 'antd';
 import {
   HomeOutlined,
   BookOutlined,
@@ -9,7 +9,6 @@ import {
   SettingOutlined,
   SortAscendingOutlined,
   EyeInvisibleOutlined,
- 
 } from '@ant-design/icons';
 import Home1 from './Home1';
 import HomeContent from './HomeContent';
@@ -23,7 +22,7 @@ import SermonList from './SermonList';
 import TourComponent from '../components/Tour.js';
 import FloatingSearchIcon from './Search';
 // import { EllipsisOutlined } from '@ant-design/icons';
-import { Button,  Tour } from 'antd';
+import { Button, Tour } from 'antd';
 
 import earlySermons from '../sermons/1964-1969/firstset';
 import secondSet from '../sermons/1970/1970';
@@ -31,6 +30,7 @@ import thirdSet from '../sermons/1971/1971';
 import fourthSet from '../sermons/1972/1972';
 import lastSet from '../sermons/1973/1973';
 import audioSermons from '../sermons/audio';
+import { FaMicrophone, FaPause, FaPlay, FaTimes } from 'react-icons/fa';
 
 const sermonCollection = [
   ...earlySermons,
@@ -38,7 +38,7 @@ const sermonCollection = [
   ...thirdSet,
   ...fourthSet,
   ...lastSet,
-  ...audioSermons
+  ...audioSermons,
 ];
 
 const Home = () => {
@@ -121,12 +121,13 @@ const Home = () => {
   const [activeTab, setActiveTab] = useState('Home');
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [ascending, setAscending] = useState(true);
-  const [sermonSearch , setSermonSearch] = useState('');
+  const [sermonSearch, setSermonSearch] = useState('');
+  const [utterance, setUtterance] = useState(selectedSermon.sermon);
   const sermonTextRef = useRef(null);
 
- useEffect(() => {
-  setAllSermons(sermonCollection)
- }, [setAllSermons])
+  useEffect(() => {
+    setAllSermons(sermonCollection);
+  }, [setAllSermons]);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -170,47 +171,51 @@ const Home = () => {
       .replace(/[^\w\s]/g, '');
     const paragraph = sermonTextRef.current;
     const originalText = paragraph.innerText;
-    
+
     // Remove previous highlights and icons
     paragraph.innerHTML = originalText;
-  
+
     if (input.length > 0) {
       const inputRegex = input.split(/\s+/).join('\\s*');
       const regex = new RegExp(`(${inputRegex})`, 'gi');
-      
+
       let highlightedText = originalText;
       let match;
       let lastIndex = 0;
       const fragments = [];
-  
+
       // Define the icon HTML
-      const locationIconHtml = '<img src="./edit.png" class="location-icon" alt="Location Icon" style="vertical-align: middle; margin-right: 3px;  width: 16px; height: 16px;" />';
-  
+      const locationIconHtml =
+        '<img src="./edit.png" class="location-icon" alt="Location Icon" style="vertical-align: middle; margin-right: 3px;  width: 16px; height: 16px;" />';
+
       while ((match = regex.exec(originalText)) !== null) {
         const matchStart = match.index;
         const matchEnd = regex.lastIndex;
-  
+
         // Add the text before the match
         if (matchStart > lastIndex) {
           fragments.push(originalText.slice(lastIndex, matchStart));
         }
-  
+
         // Add the highlighted match with an icon
-        fragments.push(`<span class="highlight flex">${locationIconHtml}${match[0]}</span>`);
-  
+        fragments.push(
+          `<span class="highlight flex">${locationIconHtml}${match[0]}</span>`
+        );
+
         lastIndex = matchEnd;
       }
-  
+
       // Add any remaining text after the last match
       if (lastIndex < originalText.length) {
         fragments.push(originalText.slice(lastIndex));
       }
-  
+
       highlightedText = fragments.join('');
-  
-      if (fragments.length > 1) {  // If we found any matches
+
+      if (fragments.length > 1) {
+        // If we found any matches
         paragraph.innerHTML = highlightedText;
-  
+
         // Scroll to the first highlighted text
         const highlightElement = paragraph.querySelector('.highlight');
         if (highlightElement) {
@@ -228,39 +233,63 @@ const Home = () => {
     }
   };
 
-// Function to escape special characters for regex
-function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
 
-const searchByTitleOrYear = () => {
-  // Sanitize the search input to escape any special regex characters
-  const sanitizedSearch = escapeRegExp(sermonSearch);
+  const readSermon = () => {
+    if (selectedSermon && selectedSermon.sermon) {
+      const newUtterance = new SpeechSynthesisUtterance(selectedSermon.sermon);
+      window.speechSynthesis.speak(newUtterance);
+    } else {
+      console.error("Selected sermon is not defined or does not contain a sermon text.");
+    }
+  };
 
-  // Construct the regex with the sanitized search term
-  let searchRegex;
-  try {
-    searchRegex = new RegExp(sanitizedSearch, 'i');
-  } catch (e) {
-    // Handle invalid regex error (fallback to a safe search)
-    searchRegex = new RegExp('', 'i');
+  const stopReading = () => {
+      window.speechSynthesis.cancel();
+
+  };
+
+  const pauseReading = () => {
+    // if (window.speechSynthesis.speaking && !window.speechSynthesis.paused)
+      window.speechSynthesis.pause();
+
+  };
+
+  const resumeReading = () => {
+    // if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    // }
+  };
+
+  // Function to escape special characters for regex
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-  const filteredSermons = sermonCollection.filter((sermon) => 
-    searchRegex.test(sermon.title) || searchRegex.test((sermon.year))
-  );
+  const searchByTitleOrYear = () => {
+    // Sanitize the search input to escape any special regex characters
+    const sanitizedSearch = escapeRegExp(sermonSearch);
 
-  setAllSermons(filteredSermons);
+    // Construct the regex with the sanitized search term
+    let searchRegex;
+    try {
+      searchRegex = new RegExp(sanitizedSearch, 'i');
+    } catch (e) {
+      // Handle invalid regex error (fallback to a safe search)
+      searchRegex = new RegExp('', 'i');
+    }
 
-  // Reset to all sermons if search input is empty
-  if (sermonSearch.length === 0) {
-    setAllSermons(sermonCollection);
-  }
-};
+    const filteredSermons = sermonCollection.filter(
+      (sermon) =>
+        searchRegex.test(sermon.title) || searchRegex.test(sermon.year)
+    );
 
+    setAllSermons(filteredSermons);
 
-  
-  
+    // Reset to all sermons if search input is empty
+    if (sermonSearch.length === 0) {
+      setAllSermons(sermonCollection);
+    }
+  };
 
   const toggleSidebarVisibility = () => {
     setIsSidebarVisible((prevState) => !prevState);
@@ -274,7 +303,7 @@ const searchByTitleOrYear = () => {
       className="flex bg-background flex-col min-h-screen overflow-x-hidden home"
     >
       <header className="bg-background text-text fixed top-0 left-0 right-0 z-10 ">
-        <div className="flex w-full items-center space-x-4 justify-between py-3">
+        <div className="flex w-full items-center space-x-4 justify-between py-3 px-3">
           <div className="flex items-center justify-center gap-8 pr-10">
             <Button
               className="bg-[transparent] border-none"
@@ -329,6 +358,34 @@ const searchByTitleOrYear = () => {
             )}
             <TourComponent runTour={runTour} setRunTour={setRunTour} />
           </div>
+          {activeTab === 'Sermons' && (
+            <div className='flex items-center justify-center gap-2'>
+              <div className="h-8 w-8 bg-textBlue rounded-full shadow-inner shadow-text hover:border hover:border-button duration-300 flex items-center justify-center" title='start reading'>
+                      <FaMicrophone onClick={readSermon} />
+
+              </div>
+
+
+                <div className="flex space-x-2">
+                  <div className="h-8 w-8 bg-textBlue rounded-full shadow-inner shadow-text hover:border hover:border-button duration-300 flex items-center justify-center" title='pause'>
+
+
+                      <FaPause onClick={pauseReading} />
+
+                  </div>
+
+                  <div className="h-8 w-8 bg-textBlue rounded-full shadow-inner shadow-text hover:border hover:border-button duration-300 flex items-center justify-center" title='resume'>
+                      <FaPlay onClick={resumeReading}/>
+
+                  </div>
+
+                  <div className="h-8 w-8 bg-textBlue rounded-full shadow-inner shadow-text hover:border hover:border-button duration-300 flex items-center justify-center" title='end'>
+                    <FaTimes onClick={stopReading} />
+                  </div>
+                </div>
+
+            </div>
+          )}
         </div>
         {activeTab === 'Sermons' && (
           <div className="bg-lighter p-2 gap-3 flex items-center justify-between w-full ">
@@ -389,7 +446,7 @@ const searchByTitleOrYear = () => {
         >
           <div className="mb-4 flex flex-col gap-2 fixed bg-background pt-8 pb-2 w-[28%] top-0">
             <Button
-            ref={ref6}
+              ref={ref6}
               icon={<SortAscendingOutlined />}
               onClick={sortByTitle}
               className="w-full bg-textBlue text-[white] border-none shadow-inner  shadow-text"
@@ -397,12 +454,11 @@ const searchByTitleOrYear = () => {
               Sort by Title
             </Button>
             <form className="flex items-center bg-background rounded-lg shadow-md">
-              
               <input
-              ref={ref7}
+                ref={ref7}
                 type="text"
                 onChange={(e) => {
-                  console.log(sermonCollection[7])
+                  console.log(sermonCollection[7]);
                   // e.preventDefault();
                   setSermonSearch(e.target.value);
                   searchByTitleOrYear();
