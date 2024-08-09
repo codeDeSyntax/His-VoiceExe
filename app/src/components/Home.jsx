@@ -76,11 +76,11 @@ const Home = () => {
         'You will be able to change the sermon text settings as you please.',
       target: () => ref4.current,
     },
-    {
-      title: 'Search',
-      description: 'Search for a Quote withing the current sermon.',
-      target: () => ref5.current,
-    },
+    // {
+    //   title: 'Search',
+    //   description: 'Search for a Quote withing the current sermon.',
+    //   target: () => ref5.current,
+    // },
     {
       title: 'Side bar',
       description: 'See what happens in this side bar.',
@@ -164,74 +164,73 @@ const Home = () => {
     setSelectedSermon(sermon);
   };
 
-  const searchText = (searchTerm) => {
-    const input = searchTerm
-      .trim()
-      .toLowerCase()
-      .replace(/[^\w\s]/g, '');
-    const paragraph = sermonTextRef.current;
-    const originalText = paragraph.innerText;
+  // const searchText = (searchTerm) => {
+  //   const input = searchTerm.trim().toLowerCase();
 
-    // Remove previous highlights and icons
-    paragraph.innerHTML = originalText;
+  //   const paragraph = sermonTextRef.current;
+  //   const originalText = paragraph.innerText;
 
-    if (input.length > 0) {
-      const inputRegex = input.split(/\s+/).join('\\s*');
-      const regex = new RegExp(`(${inputRegex})`, 'gi');
+  //   // Remove previous highlights and icons
+  //   paragraph.innerHTML = originalText;
 
-      let highlightedText = originalText;
-      let match;
-      let lastIndex = 0;
-      const fragments = [];
+  //   if (input.length > 0) {
+  //     // Escape special regex characters in the search term
+  //     const escapedInput = input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-      // Define the icon HTML
-      const locationIconHtml =
-        '<img src="./edit.png" class="location-icon" alt="Location Icon" style="vertical-align: middle; margin-right: 3px;  width: 16px; height: 16px;" />';
+  //     // Create a regex pattern that matches the whole phrase
+  //     const regex = new RegExp(escapedInput, 'gi');
 
-      while ((match = regex.exec(originalText)) !== null) {
-        const matchStart = match.index;
-        const matchEnd = regex.lastIndex;
+  //     let match;
+  //     let lastIndex = 0;
+  //     const fragments = [];
 
-        // Add the text before the match
-        if (matchStart > lastIndex) {
-          fragments.push(originalText.slice(lastIndex, matchStart));
-        }
+  //     // Define the icon HTML
+  //     const locationIconHtml = '<img src="./location.png" class="location-icon" alt="Location Icon" />';
 
-        // Add the highlighted match with an icon
-        fragments.push(
-          `<span class="highlight flex">${locationIconHtml}${match[0]}</span>`
-        );
+  //     while ((match = regex.exec(originalText)) !== null) {
+  //       const matchStart = match.index;
+  //       const matchEnd = matchStart + match[0].length;
 
-        lastIndex = matchEnd;
-      }
+  //       // Add the text before the match
+  //       if (matchStart > lastIndex) {
+  //         fragments.push(originalText.slice(lastIndex, matchStart));
+  //       }
 
-      // Add any remaining text after the last match
-      if (lastIndex < originalText.length) {
-        fragments.push(originalText.slice(lastIndex));
-      }
+  //       // Add the highlighted match with an icon
+  //       const originalMatchText = originalText.slice(matchStart, matchEnd);
+  //       fragments.push(
+  //         `<span class="highlight" style="position: relative; display: inline-block;">
+  //           ${locationIconHtml}
+  //           <span style="position: relative;">${originalMatchText}</span>
+  //         </span>`
+  //       );
 
-      highlightedText = fragments.join('');
+  //       lastIndex = matchEnd;
+  //     }
 
-      if (fragments.length > 1) {
-        // If we found any matches
-        paragraph.innerHTML = highlightedText;
+  //     // Add any remaining text after the last match
+  //     if (lastIndex < originalText.length) {
+  //       fragments.push(originalText.slice(lastIndex));
+  //     }
 
-        // Scroll to the first highlighted text
-        const highlightElement = paragraph.querySelector('.highlight');
-        if (highlightElement) {
-          highlightElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-          });
-        }
-      } else {
-        // If no matches, reset to original text
-        paragraph.innerHTML = originalText;
-        // Reset scroll position if no match is found
-        window.scrollTo(0, 0);
-      }
-    }
-  };
+  //     paragraph.innerHTML = fragments.join('');
+
+  //     // Scroll to the first highlighted text
+  //     const highlightElement = paragraph.querySelector('.highlight');
+  //     if (highlightElement) {
+  //       highlightElement.scrollIntoView({
+  //         behavior: 'smooth',
+  //         block: 'center',
+  //       });
+  //     }
+  //   } else {
+  //     // Reset scroll position if search term is empty
+  //     window.scrollTo(0, 0);
+  //   }
+  // };
+
+
+
 
 
   const readSermon = () => {
@@ -353,33 +352,33 @@ const Home = () => {
                 See how it works
               </Button>
             )}
-            {activeTab === 'Sermons' && (
-              <FloatingSearchIcon searchText={searchText} ref5={ref5} />
-            )}
+            {/* {activeTab === 'Sermons' && (
+              // <FloatingSearchIcon searchText={searchText} ref5={ref5} />
+            )} */}
             <TourComponent runTour={runTour} setRunTour={setRunTour} />
           </div>
           {activeTab === 'Sermons' && (
             <div className='flex items-center justify-center gap-2'>
-              <div className="h-8 w-8 bg-textBlue rounded-full shadow-inner shadow-text hover:border hover:border-button duration-300 flex items-center justify-center" title='start reading'>
+              <div className="h-8 w-8 bg-textBlue rounded-full shadow-inner shadow-text hover:border-2 hover:cursor-pointer hover:border-button duration-300 flex items-center justify-center" title='start reading'>
                       <FaMicrophone onClick={readSermon} />
 
               </div>
 
 
                 <div className="flex space-x-2">
-                  <div className="h-8 w-8 bg-textBlue rounded-full shadow-inner shadow-text hover:border hover:border-button duration-300 flex items-center justify-center" title='pause'>
+                  <div className="h-8 w-8 bg-textBlue rounded-full shadow-inner shadow-text hover:border-2 cursor-pointer hover:border-button duration-300 flex items-center justify-center" title='pause'>
 
 
-                      <FaPause onClick={pauseReading} />
+                      <FaPause onClick={pauseReading} className=''/>
 
                   </div>
 
-                  <div className="h-8 w-8 bg-textBlue rounded-full shadow-inner shadow-text hover:border hover:border-button duration-300 flex items-center justify-center" title='resume'>
+                  <div className="h-8 w-8 bg-textBlue rounded-full shadow-inner shadow-text hover:border-2 cursor-pointer hover:border-button duration-300 flex items-center justify-center" title='resume'>
                       <FaPlay onClick={resumeReading}/>
 
                   </div>
 
-                  <div className="h-8 w-8 bg-textBlue rounded-full shadow-inner shadow-text hover:border hover:border-button duration-300 flex items-center justify-center" title='end'>
+                  <div className="h-8 w-8 bg-textBlue rounded-full shadow-inner shadow-text hover:border-2 cursor-pointer hover:border-button duration-300 flex items-center justify-center" title='end'>
                     <FaTimes onClick={stopReading} />
                   </div>
                 </div>
@@ -388,10 +387,10 @@ const Home = () => {
           )}
         </div>
         {activeTab === 'Sermons' && (
-          <div className="bg-lighter p-2 gap-3 flex items-center justify-between w-full ">
+          <div className="bg-lighter p-[.2rem] gap-3 flex items-center justify-between w-full ">
             <div className="">
-              <p className="font-mono text-text">{selectedSermon?.title}</p>
-              <p className="text-textBlue font-mono"> {selectedSermon?.date}</p>
+              <p className="font-mono text-text text-[.8rem]">{selectedSermon?.title}</p>
+              <p className="text-textBlue font-mono text-[.7rem]"> {selectedSermon?.date}</p>
             </div>
             {sermonsInTab.length > 0 && (
               <div className="flex items-center justify-center gap-2">

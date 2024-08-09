@@ -23,12 +23,24 @@ background-size: cover;
   text-decoration: underline;
   font-style: oblique;
 }
-.location-icn {
-  width: 16px;
-  height: 16px; 
-  vertical-align: middle; /* Align icon with text */
-  margin-right: 4px; /* Space between icon and text */
+.location-icon {
+  position: absolute;
+  top: -16px; /* Adjust this value to position the icon above the text */
+  left: 0;
+  width: 20px;
+  height: 20px;
 }
+
+/* .highlight {
+  position: relative;
+  display: inline;
+} */
+
+.highlight > img {
+  display: block;
+  margin: 0 auto;
+}
+
 .settings-container {
   display: flex;
   flex-direction: column;

@@ -1,21 +1,24 @@
 import React, { useContext } from 'react';
 import { SermonContext } from '../components/GlobalState';
 import SolarSystem from '../components/Stars';
+import FloatingSearchIcon from './Search';
 const SermonsContent = ({ sermonTextRef }) => {
   const { selectedSermon, settings } = useContext(SermonContext);
 
   const sermonTextStyle = {
-
     fontSize: `${settings.textSize}rem`,
     fontFamily: `${settings.fontFamily}`, // Convert textSize to rem units
   };
-const storedSettings = JSON.parse(localStorage.getItem('sermonSettings'));
+  const storedSettings = JSON.parse(localStorage.getItem('sermonSettings'));
   return (
-    <div className={`p-4 min-h-screen pt-20 flex flex-col items-center justify-start sem ${storedSettings.useImageBackground ? 'sermonBack': 'bg-background'}`}>
+    <div
+      className={`p-4 min-h-screen pt-10 flex flex-col items-center justify-start sem ${
+        storedSettings.useImageBackground ? 'sermonBack' : 'bg-background'
+      }`}
+    >
       <h3 className="text-[1.5rem] font-mono font-semibold text-text text-center mt-28">
         {selectedSermon.title}
         {/* <FloatingSearchIcon/> */}
-
       </h3>
       <p className={`font-mono text-text text-center`}>{selectedSermon.date}</p>
       <SolarSystem />
@@ -41,11 +44,9 @@ const storedSettings = JSON.parse(localStorage.getItem('sermonSettings'));
             backgroundColor: `${settings.backgroundColor}`,
             color: `${settings.textColor}`,
           }}
-
-
         >
-           🔊 {selectedSermon.sermon} 🔑
-
+          🔊 {selectedSermon.sermon} 🔑
+          <FloatingSearchIcon sermonTextRef={sermonTextRef} />
         </div>
       )}
     </div>
