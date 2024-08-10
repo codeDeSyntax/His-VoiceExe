@@ -22,6 +22,7 @@ const SermonsContent = ({ sermonTextRef }) => {
       </h3>
       <p className={`font-mono text-text text-center`}>{selectedSermon.date}</p>
       <SolarSystem />
+      <FloatingSearchIcon sermonTextRef={sermonTextRef} />
       {selectedSermon.hasOwnProperty('type') ? (
         <>
           <audio controls className="mt-6">
@@ -46,7 +47,6 @@ const SermonsContent = ({ sermonTextRef }) => {
           }}
         >
           🔊 {selectedSermon.sermon} 🔑
-          <FloatingSearchIcon sermonTextRef={sermonTextRef} />
         </div>
       )}
     </div>

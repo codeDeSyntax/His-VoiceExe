@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { SermonContext } from '../components/GlobalState';
 
-const FloatingSearchIcon = ({ ref5, sermonTextRef }) => {
+const FloatingSearchIcon = ({  sermonTextRef }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [matches, setMatches] = useState([]);
   const [currentMatchIndex, setCurrentMatchIndex] = useState(-1);
@@ -152,12 +152,12 @@ const FloatingSearchIcon = ({ ref5, sermonTextRef }) => {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="px-4 py-2 rounded-l-lg focus:outline-none bg-lighter shadow-inner shadow-text"
+              className="px-4 py-2 rounded-l-lg focus:outline-none bg-lighter shadow-inner shadow-text text-text"
               placeholder="Search..."
             />
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-500 shadow-inner shadow-text text-white rounded-r-lg bg-textBlue"
+              className="px-4 py-2 bg-blue-500 shadow-inner text-text shadow-text text-white rounded-r-lg bg-textBlue"
             >
               Search
             </button>
@@ -172,7 +172,7 @@ const FloatingSearchIcon = ({ ref5, sermonTextRef }) => {
 
           {matches.length > 0 && (
             <div className="mt-2 flex items-center justify-between bg-lighter p-2 rounded-lg shadow-inner shadow-text">
-              <div>
+              <div className='text-text'>
                 {currentMatchIndex + 1} of {matches.length} matches
               </div>
               <div className="flex items-center">
@@ -197,7 +197,7 @@ const FloatingSearchIcon = ({ ref5, sermonTextRef }) => {
       )}
       <div>
         <button
-          ref={ref5}
+
           onClick={toggleSearch}
           className={`p-2 text-text bg-button h-8 w-8 rounded-full flex items-center justify-center ${
             isExpanded ? 'hidden' : ''

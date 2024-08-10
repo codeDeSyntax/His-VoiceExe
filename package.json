@@ -3,10 +3,9 @@
   "productName": "His Voice",
   "version": "1.0.0",
   "description": "The app is meant for reading sermons",
-  "main": "index.js",
+  "main": "main.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx electronmon .",
     "dev": "npx electronmon .",
     "dist": "electron-builder"
@@ -21,17 +20,16 @@
     "appId": "com.yourcompany.yourapp",
     "productName": "His Voice",
     "files": [
-      "dist/",
-      "build/",
+      "hisVoice/",
+      "app/build/",
       "node_modules/",
-      "index.js",
       "package.json"
     ],
     "directories": {
       "output": "release"
     },
     "win": {
-      "icon": "build/cloud.ico",
+      "icon": "app/build/cloud.ico",
       "target": [
         "nsis",
         "zip"
@@ -44,8 +42,8 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "installerIcon": "build/cloud.ico",
-      "uninstallerIcon": "build/cloud.ico"
+      "installerIcon": "images/Bob.ico",
+      "uninstallerIcon": "images/Bob.ico"
     }
   },
   "devDependencies": {
