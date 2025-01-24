@@ -2,99 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-  overflow-x: hidden;
+/* @font-face {
+  font-family: "Fira Sans";
+  src: url("/FiraSans-Regular.ttf") format("ttf");
+  font-weight: 400;
 }
-.sermonText {
-  font-family: monospace;
-  padding: 20px;
-  font-weight: 600;
-  /* text-wrap: wrap; */
-  /* overflow-wrap: break-word; */
+
+@font-face {
+  font-family: "Nanum Barun Gothic";
+  src: url("/fonts/NanumBarunGothic-Regular.woff2") format("woff2");
+  font-weight: 400; */
+/* } */
+.ant-input::placeholder {
+  color: white; /* Replace with your desaired color */
 }
+
+/* Hide scrollbar for Chrome, Safari, and Edge */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge, and Firefox */
+body {
+  scrollbar-width: none; /* For Firefox */
+}
+
+/* Ensure scrolling is still enabled */
+body {
+  overflow: scroll;
+}
+
 .highlight {
-  color: #00ff00;
-  text-decoration: underline;
-  font-style: oblique;
+  background-color: green;
+  color: white;
+  padding: 2px 4px;
+  border-radius: 4px;
+  border-color: #164430;
 }
-
-.settings-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  border-radius: 8px;
-  min-height: 100vh;
-}
-
-.icon-circle {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background-color: #e9ecef;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.settings-content {
-  max-width: 400px;
-}
-
-.setting-item {
-  margin-bottom: 16px;
-}
-
-.setting-item label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;}
-
-  /* body, html {
-    overflow: hidden;
-  } */
-  .sem::-webkit-scrollbar {
-    display: none;
-  }
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey;
-    border-radius: 10px; /* Adjusted for rounded corners */
-    background-color: #8c8c8c;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: #22272a;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: #40aae2;
-  }
-  
-
-audio {
-  filter: sepia(20%) saturate(70%) grayscale(1) contrast(99%) invert(12%);
-  width: 200px;
-  height: 25px;
-}
-
-.ant-drawer-content-wrapper{
-  background-color:'#171a1c';
-}
-/* body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-} */

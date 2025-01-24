@@ -1,133 +1,100 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { app, BrowserWindow, Menu, screen } from 'electron';
+import { app, BrowserWindow, screen, ipcMain } from 'electron';
 
 const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
 
 let mainWindow;
-let noteAppWindow;
-let aboutWindow;
+let loadingWindow;
 
-// Main Window
+function createLoadingWindow() {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  loadingWindow = new BrowserWindow({
+    width: 700,
+    height: 500,
+    frame: false,
+    roundedCorners: true,
+    backgroundColor: '#202425',
+    center: true,
+    title: 'Loading...',
+    skipTaskbar: true,
+    alwaysOnTop: true,
+    resizable: false,
+    webPreferences: {
+      nodeIntegration: true,
+    },
+  });
+
+  loadingWindow.loadFile(path.join(__dirname, './ui/loader.html'));
+}
+
 function createMainWindow() {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+
   mainWindow = new BrowserWindow({
     width: width,
     height: height,
-    icon: path.join(__dirname, 'app', '/build/cloud.png'), // Uncomment if you have an icon
+    icon: path.join(__dirname, 'app', '/build/cloud.png'),
     resizable: isDev,
+    frame: false,
+    theme: 'dark',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: true,
+      preload: path.join(__dirname, './preload.cjs'),
     },
-    useContentSize: true,
+    show: false,
   });
 
-  // const startUrl = path.join(__dirname, 'app', '/build/index.html');
-  // mainWindow.loadURL(`file://${startUrl}`);
-  mainWindow.loadURL('http://localhost:3000/');
+   const startUrl = path.join(__dirname, 'app', '/build/index.html');
+  mainWindow.loadURL(`file://${startUrl}`);
+  // mainWindow.loadURL('http://localhost:3001/');
+  mainWindow.setMenuBarVisibility(false);
 
-
-}
-
-function createAboutWindow() {
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
-  aboutWindow = new BrowserWindow({
-    width: Math.min(810, width),
-    height: Math.min(800, height),
-    title: 'About Electron',
-    icon: path.join(__dirname, 'assets', 'Brobob.jpg'),
-    useContentSize: true,
+  ipcMain.on("minimizeApp", () => {
+    mainWindow?.minimize();
+  });
+  ipcMain.on("maximizeApp", () => {
+    if (mainWindow?.isMaximized()) {
+      mainWindow?.unmaximize();
+    } else {
+      mainWindow?.maximize();
+    }
+  });
+  ipcMain.on("closeApp", () => {
+    mainWindow?.close();
   });
 
-  aboutWindow.loadFile(path.join(__dirname, 'about.html'));
-}
 
-function openNoteApp() {
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
-  noteAppWindow = new BrowserWindow({
-    width: Math.min(1000, width),
-    height: Math.min(1000, height),
-    title: 'Song Book',
-    icon: path.join(__dirname, 'app', '/build/Bro bob.ico'),
-    useContentSize: true,
+  mainWindow.webContents.on('did-finish-load', () => {
+    if (loadingWindow && !loadingWindow.isDestroyed()) {
+      loadingWindow.close();
+    }
+    mainWindow.maximize();
+    mainWindow.show();
+    // if (isDev) {
+    //   mainWindow.webContents.openDevTools();
+    // }
+    
   });
 
-  noteAppWindow.loadFile(path.join(__dirname, 'notes.html'));
+  mainWindow.on('closed', () => (mainWindow = null));
 }
 
-// When the app is ready, create the window
 app.on('ready', () => {
+  createLoadingWindow();
   createMainWindow();
 
-  const mainMenu = Menu.buildFromTemplate(menu);
-  Menu.setApplicationMenu(mainMenu);
-
-  // Remove variable from memory
-  mainWindow.on('closed', () => (mainWindow = null));
 });
 
-// Menu template
-const menu = [
-  ...(isMac
-    ? [
-        {
-          label: app.name,
-          submenu: [
-            {
-              label: 'About',
-              click: createAboutWindow,
-            },
-          ],
-        },
-      ]
-    : []),
-  {
-    role: 'fileMenu',
-  },
-  ...(!isMac
-    ? [
-        {
-          label: 'Apps',
-          submenu: [
-            {
-              label: 'About',
-              click: createAboutWindow,
-            },
-            {
-              label: 'Open Notes',
-              click: openNoteApp,
-            },
-          ],
-        },
-      ]
-    : []),
-
-  // ...(isDev
-  //   ? [
-  //       {
-  //         label: 'Developer',
-  //         submenu: [
-  //           { role: 'reload' },
-  //           { role: 'forcereload' },
-  //           { type: 'separator' },
-  //           { role: 'toggledevtools' },
-  //         ],
-  //       },
-  //     ]
-  //   : []),
-];
-
-// Quit when all windows are closed.
 app.on('window-all-closed', () => {
   if (!isMac) app.quit();
 });
 
-// Open a window if none are open (macOS)
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
 });
+
+export default app;

@@ -1,28 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import Home from "./components/Home";
-import { SermonProvider } from "./components/GlobalState";
-import Loader from "./components/Loader"
+import Hisvoice from "./components/Hisvoice";
+import { useState,useEffect } from "react";
+import Loader from "./components/Loader";
+// import Songs from "./components/Songs";
 
-export default function App() {
-  const [isLoading, setIsLoading] = useState(true);
+const App = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Simulate an API call or resource loading
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    },6000); // 2 seconds delay
+    const handleLoad = () => {
+      setIsLoaded(true);
+    };
 
-    return () => clearTimeout(timer);
+    window.addEventListener("load", handleLoad);
+
+    // Fallback: Hide the loader after 3 seconds
+    const timeout = setTimeout(() => setIsLoaded(true), 5000);
+
+    return () => {
+      window.removeEventListener("load", handleLoad);
+      clearTimeout(timeout);
+    };
   }, []);
-
-  if (isLoading) {
-    return <Loader />;
-  }
-
-
   return (
-    <SermonProvider >
-      <Home/>
-    </SermonProvider>
+    <div className="text-blue-500 text-lg scrollbar-hidden">
+      {/* {isLoaded ? <Hisvoice /> : <Loader />} */}
+      <Hisvoice />
+      {/* <Songs/> */}
+    </div>
   );
-}
+};
+
+export default App;

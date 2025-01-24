@@ -1,289 +1,289 @@
-import React, {
-  useState,
-  useContext,
-  useRef,
-} from 'react';
-import { SermonContext } from '../components/GlobalState';
-import { motion } from 'framer-motion';
-import { Drawer, Button, Input } from 'antd';
-import {
-  HomeOutlined,
-  BookOutlined,
-  VideoCameraOutlined,
-  SettingOutlined,
-  SortAscendingOutlined,
-  EyeInvisibleOutlined,
-  SearchOutlined,
-} from '@ant-design/icons';
-import Home1 from './Home1'
-import HomeContent from './HomeContent';
-import SermonsContent from './SermonsContent';
-import VideosContent from './VideosContent';
-import SettingsContent from './SettingsContent';
-import SongsContent from './SongContent';
-import TitleDrop from './TitleDrop';
-import YearDrop from './YearDrop';
-import SermonList from './SermonList';
-import TourComponent from '../components/Tour.js';
-import FloatingSearchIcon from './Search';
-
-const { Search } = Input;
+import { useEffect, useMemo, useState, useContext } from 'react';
+import { SermonContext } from '../Logic/SermonProvider';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Home = () => {
-  const [runTour, setRunTour] = useState(false);
-  const {
-    selectedSermon,
-    sermonsInTab,
-    setSelectedSermon,
-    deleteSermonInTab,
-    allSermons,
-    setAllSermons,
-    settings
-  } = useContext(SermonContext);
-  const [activeTab, setActiveTab] = useState('Home');
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  const [ascending, setAscending] = useState(true);
-  const sermonTextRef = useRef(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentScriptureIndex, setCurrentScriptureIndex] = useState(0);
+  const { randomSermons, setSelectedMessage, setActiveTab, setCB } =
+    useContext(SermonContext);
 
-  const startTour = () => {
-    setRunTour(true);
-  };
+  const scriptures = useMemo(
+    () => [
+      {
+        verse:
+          'But in the days of the voice of the seventh angel, when he shall begin to sound, the mystery of God should be finished, as he hath declared to his servants the prophets.',
+        reference: 'Revelation 10:7',
+      },
+      {
+        verse:
+          'And I saw another mighty angel come down from heaven, clothed with a cloud: and a rainbow was upon his head, and his face was as it were the sun, and his feet as pillars of fire',
+        reference: 'Revelation 10:1',
+      },
+      {
+        verse:
+          'Wherefore we labour, that, whether present or absent, we may be accepted of him.',
+        reference: 'II Corinthians 5:9',
+      },
+      {
+        verse:
+          'Seeing ye have purified your souls in obeying the truth through the Spirit unto unfeigned love of the brethren, see that ye love one another with a pure heart fervently',
+        reference: 'I Peter 1:22',
+      },
+      {
+        verse:
+          'For I reckon that the sufferings of this present time are not worthy to be compared with the glory which shall be revealed in us',
+        reference: 'Romans 8:18',
+      },
+      {
+        verse:
+          'Let us hear the conclusion of the whole matter: Fear God, and keep his commandments: for this is the whole duty of man.',
+        reference: 'Ecclesiastes 12:13',
+      },
+    ],
+    []
+  );
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'Home':
-        return <HomeContent />;
-      case 'Home1':
-        return <Home1 sermonTextRef={sermonTextRef}/>;
-      case 'Sermons':
-        return <SermonsContent sermonTextRef={sermonTextRef} />;
-      case 'Videos':
-        return <VideosContent />;
-      case 'Settings':
-        return <SettingsContent />;
-      case 'Songs':
-        return <SongsContent />;
-      default:
-        return <HomeContent />;
-    }
-  };
+  const images = useMemo(
+    () => [
+      './led.jpg',
+      './pic3.jpg',
+      './pi8.jpg',
+      './pic5.jpg',
+    ],
+    []
+  );
 
-  const sortByTitle = () => {
-    const sortedSermons = [...allSermons].sort((a, b) => {
-      const titleA = a.title.toUpperCase();
-      const titleB = b.title.toUpperCase();
-      return ascending ? titleA.localeCompare(titleB) : titleB.localeCompare(titleA);
-    });
-    setAllSermons(sortedSermons);
-    setAscending(!ascending);
-  };
+  useEffect(() => {
+    const switchImage = () => {
+      const newIndex = Math.floor(Math.random() * images.length);
+      setCurrentImageIndex(newIndex);
+    };
 
-  const handleSermonClick = (sermon) => {
-    setSelectedSermon(sermon);
-  };
+    const switchScripture = () => {
+      setCurrentScriptureIndex((prev) =>
+        prev === scriptures.length - 1 ? 0 : prev + 1
+      );
+    };
 
-  const searchText = (searchTerm) => {
-    const input = searchTerm
-      .trim()
-      .toLowerCase()
-      .replace(/[^\w\s]/g, '');
-    const paragraph = sermonTextRef.current;
-    const text = paragraph.innerText.toLowerCase().replace(/[^\w\s]/g, '');
+    setCB(currentImageIndex);
+    const imageInterval = setInterval(switchImage, 20000);
+    const scriptureInterval = setInterval(switchScripture, 10000);
 
-    // Remove previous highlights
-    paragraph.innerHTML = paragraph.innerText;
-
-    if (input.length > 0) {
-      const inputRegex = input.split(/\s+/).join('\\s*');
-      const regex = new RegExp(inputRegex, 'gi');
-      const matches = text.match(regex);
-
-      if (matches) {
-        let highlightedText = paragraph.innerHTML;
-
-        matches.forEach((match) => {
-          // Create a regex for the original match in the paragraph with punctuation and spaces
-          const originalMatchRegex = new RegExp(
-            match.split('').join('[^\\w\\s]*'),
-            'i'
-          );
-          const originalMatchArray =
-            paragraph.innerText.match(originalMatchRegex);
-
-          if (originalMatchArray) {
-            const originalMatch = originalMatchArray[0];
-            highlightedText = highlightedText.replace(
-              new RegExp(
-                originalMatch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
-                'gi'
-              ),
-              `<span class="highlight">$&</span>`
-            );
-          }
-        });
-
-        paragraph.innerHTML = highlightedText;
-
-        // Scroll to the first highlighted text
-        const highlightElement = paragraph.querySelector('.highlight');
-        if (highlightElement) {
-          highlightElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-          });
-        }
-      } else {
-        // Reset scroll position if no match is found
-        window.scrollTo(0, 0);
-      }
-    }
-  };
-
-  const toggleSidebarVisibility = () => {
-    setIsSidebarVisible((prevState) => !prevState);
-  };
+    return () => {
+      clearInterval(imageInterval);
+      clearInterval(scriptureInterval);
+    };
+  }, [currentImageIndex, images, setCB, scriptures.length]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="flex bg-background flex-col min-h-screen overflow-x-hidden home"
-    >
-      <header className="bg-background text-text fixed top-0 left-0 right-0 z-10">
-        <div className="flex items-center space-x-4 justify-between">
-          <div className="flex items-center justify-center gap-8 pr-10">
-            <Button
-              className='bg-[transparent] border-none'
-              icon={<HomeOutlined className='text-text hover:text-[black]'/>}
-              onClick={() => setActiveTab('Home')}
-              title="home"
-            />
-            <Button
-              className='bg-[transparent] border-none'
-              icon={<BookOutlined className='text-text hover:text-[black]'/>}
-              onClick={() => {
-                setActiveTab('Sermons');
-                toggleSidebarVisibility();
-              }}
-            />
-            <Button
-              className='bg-[transparent] border-none'
-              icon={<VideoCameraOutlined className='text-text hover:text-[black]'/>}
-              onClick={() => setActiveTab('Videos')}
-              title="media"
-            />
-            <Button
-              className='bg-[transparent] border-none'
-              icon={<SettingOutlined spin className='text-text hover:text-[black]'/>}
-              onClick={() => setActiveTab('Settings')}
-              title="settings"
-            />
-            <video
-              autoPlay
-              loop
-              className="h-14 w-14 rounded-lg transition duration-300 ease-in-out transform
-              hover:scale-[9] hover:shadow-lg
-              hover:translate-y-[25vh] hover:translate-x-[30%]
-              focus:scale-[1.2] focus:shadow-lg
-              focus:-translate-y-[18vh] focus:translate-x-[20%]"
+    <div className="min-h-screen relative overflow-hidden bg-primary rounded-tl-3xl">
+      {/* Background Image Layer */}
+      {images.map((img, index) => (
+        <motion.div
+          key={img}
+          className="absolute inset-0 bg-cover bg-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: index === currentImageIndex ? 0.4 : 0 }}
+          transition={{ duration: 1.5 }}
+          style={{ backgroundImage: `url(${img || './pic3.jpg'})` }}
+        />
+      ))}
+
+      {/* Content Container */}
+      <div className="relative z-20 min-h-screen">
+        <main className="container mx-auto px-4 py-6 lg:py-8">
+          {/* Hero Section */}
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 mb-12">
+            {/* <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="lg:w-3/5 space-y-4"
             >
-              <source src="./vid.webm" type="video/webm" className="rounded-lg" />
-            </video>
-            {activeTab === 'Sermons' && (
-              <Button type='primary' onClick={startTour}>
-                Start Tour
-              </Button>
-            )}
-        {
-          activeTab === 'Sermons' && <FloatingSearchIcon searchText={searchText}/>
-        }
-            <TourComponent runTour={runTour} setRunTour={setRunTour} />
-          </div>
-        </div>
-        {activeTab === 'Sermons' && (
-          <div className="bg-lighter p-2 gap-3 flex items-center justify-between">
-            <div className="">
-              <p className="font-mono text-text">{selectedSermon?.title}</p>
-              <p className="text-textBlue font-mono"> {selectedSermon?.date}</p>
-            </div>
-            {sermonsInTab.length > 0 && (
-              <div className="flex items-center justify-center gap-2">
-                {sermonsInTab.map((sermon) => (
-                  <div
-                    className="flex items-center justify-center p-2 rounded-lg bg-background gap-2 hover:cursor-pointer group"
-                    key={sermon.id}
+              <h1 className="text-4xl lg:text-4xl font-bold text-white leading-tight">
+                Revelation <span className="text-white">10:1-3</span>
+              </h1>
+              <p className="text-lg lg:text-md text-gray-300 font  leading-relaxed font-serif">
+                And I saw another mighty angel come down from heaven, clothed
+                with a cloud: and a rainbow was upon his head, and his face was
+                as it were the sun, and his feet as pillars of fire...
+              </p>
+            </motion.div> */}
+             <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              className="lg:w-2/5"
+            >
+              <div className="relative h-48 lg:h-72 rounded-2xl overflow-hidden shadow-2xl skew-x-6">
+                <motion.img
+                  src={images[currentImageIndex]}
+                  alt="Featured"
+                  className="w-full h-full object-cover"
+                  initial={{ scale: 1.1 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 20 }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent" />
+
+                {/* <AnimatePresence mode="wait"> */}
+                  <motion.div
+                    // key={currentScriptureIndex}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5 }}
+                    className="absolute bottom-0 left-0 right-0 p-4 text-white "
                   >
-                    <p
-                      className="text-[.7rem]"
-                      onClick={() => handleSermonClick(sermon)}
-                    >
-                      {sermon.title.slice(0, 10)}
+                    <p className="text-sm lg:text-base font-serif italic mb-1">
+                      {/* {scriptures[currentScriptureIndex].verse} */}
                     </p>
-                    <Button
-                      type="text"
-                      icon={<EyeInvisibleOutlined />}
-                      className="text-textBlue text-[.5rem] cursor-pointer size-3 opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300 ease-in-out transform group-hover:scale-110 inline-block"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        deleteSermonInTab(sermon);
-                      }}
-                    />
-                  </div>
-                ))}
+                    <p className="text-xs lg:text-sm text-blue-300 font-semibold">
+                    And I saw another mighty angel come down from heaven, clothed
+                with a cloud: and a rainbow was upon his head, and his face was
+                as it were the sun, and his feet as pillars of fire...
+                    </p>
+                  </motion.div>
+                {/* </AnimatePresence> */}
               </div>
-            )}
-          </div>
-        )}
-      </header>
-      <div className="flex pt-16  ">
-        <Drawer
-          title="Sermons"
-          placement="left"
-          closable={false}
-          onClose={toggleSidebarVisibility}
-          open={isSidebarVisible && activeTab === 'Sermons'}
-          width={400}
-          bodyStyle={{ paddingBottom: 80,backgroundColor:'#171a1c' }}
-          className='w-full'
-        >
-          <div className="mb-4 flex flex-col gap-2">
-            <Button
-              icon={<SortAscendingOutlined />}
-              onClick={sortByTitle}
-              className="w-full"
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              className="lg:w-2/5"
             >
-              Sort by Title
-            </Button>
-            <TitleDrop title="Sort by Title" id="title" />
-            <YearDrop title="Sort by Year" id="year" />
-            <Search
-              placeholder="Search sermons"
-              onSearch={searchText}
-              enterButton={<SearchOutlined />}
-            />
+              <div className="relative h-48 lg:h-72 rounded-2xl overflow-hidden shadow-2xl -skew-x-6">
+                <motion.img
+                  src={images[currentImageIndex]}
+                  alt="Featured"
+                  className="w-full h-full object-cover"
+                  initial={{ scale: 1.1 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 20 }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent" />
+
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentScriptureIndex}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5 }}
+                    className="absolute bottom-0 left-0 right-0 p-4 text-white "
+                  >
+                    <p className="text-sm lg:text-base font-serif italic mb-1">
+                      {scriptures[currentScriptureIndex].verse}
+                    </p>
+                    <p className="text-xs lg:text-sm text-blue-300 font-semibold">
+                      {scriptures[currentScriptureIndex].reference}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </motion.div>
           </div>
-          <SermonList setIsSidebarVisible={setIsSidebarVisible} />
-        </Drawer>
-        <main
-          className="w-[100vw] flex flex-col"
-          style={{
-            backgroundImage: 'url(./darker.jpg)',
-            backgroundSize: 'cover',
-            width: '100vw',
-            backgroundPosition: 'center',
-          }}
-        >
-          <div className=""  style={{
-            // backgroundImage: settings.useImageBackground && 'url(/darker.jpg)',
-            backgroundSize: 'cover',
-            width: '100vw',
-            backgroundPosition: 'center',
-          }}>{renderContent()}</div>
+
+          {/* Sermons Section */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mt-8"
+          >
+            <h2 className="text-3xl lg:text-2xl font-bold text-white mb-6">
+              Robert Lambert Lee Preachings
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              <AnimatePresence>
+                {randomSermons.map((sermon) => (
+                  <motion.div
+                    key={sermon.id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    whileHover={{
+                      y: -8,
+                      transition: { duration: 0.2 },
+                    }}
+                    className="group relative bg-white/5 backdrop-blur-lg rounded-2xl hover:cursor-pointer overflow-hidden"
+                    onClick={() => {
+                      setSelectedMessage(sermon);
+                      setActiveTab('message');
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                    <div className="p-5 relative z-10">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-blue-400/30">
+                          <img
+                            src="./cloud.png"
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <h3 className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors duration-300">
+                          {sermon.title.slice(0, 30)}
+                        </h3>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center text-gray-300 text-sm">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                          </svg>
+                          {sermon.location || 'N/A'}
+                        </div>
+                        <div className="flex items-center text-gray-300 text-sm">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                          </svg>
+                          {sermon.year}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </motion.section>
         </main>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
