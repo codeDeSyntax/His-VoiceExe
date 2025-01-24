@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Minus, Square, X } from 'lucide-react';
-import DarkModeToggle from '../components/ThemeSwitcher';
+
 
 const TitleBar = ({ title = 'His voice' }) => {
   const [isHovered, setIsHovered] = useState(null);

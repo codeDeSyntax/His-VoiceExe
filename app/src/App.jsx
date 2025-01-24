@@ -1,7 +1,6 @@
 import Hisvoice from "./components/Hisvoice";
 import { useState,useEffect } from "react";
-import Loader from "./components/Loader";
-// import Songs from "./components/Songs";
+
 
 const App = () => {
   const [isLoaded, setIsLoaded] = useState(false);

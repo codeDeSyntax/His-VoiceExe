@@ -8,7 +8,6 @@ import {
   Clock,
   BookOpen,
   Info,
-  Plus,
   PlusCircle,
 } from 'lucide-react';
 import { useContext } from 'react';

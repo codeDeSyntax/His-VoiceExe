@@ -1,0 +1,35 @@
+{
+  "files": {
+    "main.css": "./static/css/main.7da66d5f.css",
+    "main.js": "./static/js/main.4a65e86e.js",
+    "static/js/83.5c854e6d.chunk.js": "./static/js/83.5c854e6d.chunk.js",
+    "static/js/837.82a5e201.chunk.js": "./static/js/837.82a5e201.chunk.js",
+    "static/js/171.b4b2d31d.chunk.js": "./static/js/171.b4b2d31d.chunk.js",
+    "static/js/324.1006410b.chunk.js": "./static/js/324.1006410b.chunk.js",
+    "static/js/447.b85253fd.chunk.js": "./static/js/447.b85253fd.chunk.js",
+    "static/js/810.8bc9d57f.chunk.js": "./static/js/810.8bc9d57f.chunk.js",
+    "static/js/17.b45512f8.chunk.js": "./static/js/17.b45512f8.chunk.js",
+    "static/js/424.f26fbf68.chunk.js": "./static/js/424.f26fbf68.chunk.js",
+    "static/js/601.a41dd5a4.chunk.js": "./static/js/601.a41dd5a4.chunk.js",
+    "static/js/712.61222b0d.chunk.js": "./static/js/712.61222b0d.chunk.js",
+    "static/js/474.4ca6804d.chunk.js": "./static/js/474.4ca6804d.chunk.js",
+    "index.html": "./index.html",
+    "main.7da66d5f.css.map": "./static/css/main.7da66d5f.css.map",
+    "main.4a65e86e.js.map": "./static/js/main.4a65e86e.js.map",
+    "83.5c854e6d.chunk.js.map": "./static/js/83.5c854e6d.chunk.js.map",
+    "837.82a5e201.chunk.js.map": "./static/js/837.82a5e201.chunk.js.map",
+    "171.b4b2d31d.chunk.js.map": "./static/js/171.b4b2d31d.chunk.js.map",
+    "324.1006410b.chunk.js.map": "./static/js/324.1006410b.chunk.js.map",
+    "447.b85253fd.chunk.js.map": "./static/js/447.b85253fd.chunk.js.map",
+    "810.8bc9d57f.chunk.js.map": "./static/js/810.8bc9d57f.chunk.js.map",
+    "17.b45512f8.chunk.js.map": "./static/js/17.b45512f8.chunk.js.map",
+    "424.f26fbf68.chunk.js.map": "./static/js/424.f26fbf68.chunk.js.map",
+    "601.a41dd5a4.chunk.js.map": "./static/js/601.a41dd5a4.chunk.js.map",
+    "712.61222b0d.chunk.js.map": "./static/js/712.61222b0d.chunk.js.map",
+    "474.4ca6804d.chunk.js.map": "./static/js/474.4ca6804d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7da66d5f.css",
+    "static/js/main.4a65e86e.js"
+  ]
+}

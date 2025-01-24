@@ -48,9 +48,9 @@ function createMainWindow() {
     show: false,
   });
 
-   const startUrl = path.join(__dirname, 'app', '/build/index.html');
-  mainWindow.loadURL(`file://${startUrl}`);
-  // mainWindow.loadURL('http://localhost:3001/');
+  //  const startUrl = path.join(__dirname, 'app', '/build/index.html');
+  // mainWindow.loadURL(`file://${startUrl}`);
+  mainWindow.loadURL('http://localhost:3001/');
   mainWindow.setMenuBarVisibility(false);
 
   ipcMain.on("minimizeApp", () => {

@@ -6,12 +6,12 @@ const DeveloperPage = () => {
     name: "Endtime Message (Divine Love Chapel)",
     role: "The Bride",
     bio: "A group of believers who have come to the understanding of the message of the hour as preached by the prophet Robert Lambert Lee. We believe that the message of the hour is the message of the Bible and that it is the only message that can prepare the Bride of Christ for the rapture (The Voice of the Christ).",
-    avatar: "/cloud.png",
+    avatar: "./cloud.png",
     product: {
       name: "His voice",
       description:
         "A powerful Tauri-based application for reading sermons preached by the prophet Robert Lambert Lee. Visit the website to download the mobile app .",
-      websiteImage: "/siteImg.jpg",
+      websiteImage: "./siteImg.jpg",
       websiteLink: "https://hisvoice.tinny.site",
       mobileApp: {
         name: "His Voice Mobile",
